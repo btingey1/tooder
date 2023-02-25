@@ -1,0 +1,315 @@
+/* RESET DEFAULTS */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,  figure, figcaption, footer, header, hgroup,  menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* MY RULES */
+
+body {
+    background-image: url("../img/Noise.png");
+    background-color: 011C3C;
+}
+
+/*            */
+/* High Level */
+/*            */
+
+::-webkit-scrollbar {
+    width: 18px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #61768F;
+    background-clip: content-box;
+    border: 5px solid transparent;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #768fad;
+    background-clip: content-box;
+    border: 5px solid transparent;
+    border-radius: 10px;
+}
+
+.site-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    height: 8%;
+    padding-top: 1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+.body {
+    display: flex;
+    height: 92%;
+}
+
+/*              */
+/* Medium Level */
+/*              */
+
+.header-left {
+    width: 50%;
+}
+
+.header-right { 
+    display: flex; 
+    width: 50%;  
+    justify-content: end;
+}
+
+.body-sub {
+    width: 25%;
+    height: 100%; 
+}
+
+.sub-title {
+    height: 15%;
+    display: flex;
+    align-items: end;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    font-family: "Space Grotesk";
+    color: white;
+    font-size: 2rem;
+    mix-blend-mode: soft-light;
+}
+
+.sub-content-container {
+    height: calc(85% - 1rem);
+}
+
+.body-main {
+    width: 50%;  
+}
+
+.body-content-wrapper {
+    margin-left: 3rem;
+    margin-right: 3rem;
+    margin-top: 3rem;
+    height: calc(100% - 3rem);;
+    width: calc(100% - 6rem);;
+    border-radius: 8px 8px 0px 0px;
+    background: linear-gradient(180deg, #465362 0%, rgba(70, 83, 98, 0.869589) 36.96%, rgba(70, 83, 98, 0.827942) 61.03%, rgba(70, 83, 98, 0) 119.4%);
+    overflow-y:scroll;
+}
+
+.body-top {
+    display: flex;
+    flex-direction: column;
+    top:0;
+    height: 33%;
+    position: sticky;
+}
+
+.scrolling {
+    background: linear-gradient(180deg, #465362 0%, #465362 36.96%, #465362 61.03%, #3F4E5E 72.92%);
+}
+
+/*            */
+/* Item Level */
+/*            */
+
+.logo {
+    height: 40px;
+}
+
+.calendar {
+    height: 40px;
+    stroke: white;
+    fill:white;
+}
+
+.tomorrow {
+    display: flex;
+    justify-content: end;
+}
+
+.sub-content-left {
+    position: fixed;
+    align-items: center;
+    right: 80vw;
+    height: 100%;
+    opacity: 30%;
+    border-radius: 8px 8px 0px 0px;
+    width: 45rem;
+    background-color: 465362;
+}
+
+.sub-content-right {
+    position: fixed;
+    left: 80vw;
+    height: 100%;
+    opacity: 30%;
+    border-radius: 8px 8px 0px 0px;
+    width: 45rem;
+    background-color: 465362;
+}
+
+.main-title {
+    height: 50%;
+    padding-top: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.main-title-text {
+    display: flex;
+    align-items: end;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    font-family: "Space Grotesk";
+    color: white;
+}
+
+h1.main-title-text {
+    font-size: 3rem;
+}
+
+h2.main-title-text {
+    font-size: 1.5rem;
+}
+
+.main-current {
+    height: calc(50%);
+}
+
+.main-current-tasks {
+    margin-top: 1rem;
+}
+
+.main-task {
+    display: flex;
+    margin-top: 1.5rem;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    margin-right: 1.1rem;
+    height: 5rem;
+    width: calc(100% - 3.1rem);
+    border-radius: 8px 8px 8px 8px;
+    background-color: #D9D9D9;
+    justify-content: center;
+}
+
+.main-task:focus-within {
+    filter: drop-shadow(0px 4px 7px rgba(0, 0, 0, 0.25));
+}
+
+input.main-text {
+    font-family: "Space Mono";
+    font-size: 18px;
+    width: 100%;
+    height: 100%;
+    padding: 12px 10px 12px 20px;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    background-color: transparent;
+  }
+
+.main-text:focus {
+    outline: none;
+    border: none;
+}
+
+.main-task-form {
+    width: 100%;
+}
+
+.main-task-detail--btn {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    width: 10%;
+}
+
+.main-task-detail--img {
+    transform: rotate(-90deg);
+}
+
+.main-task-detail--img:active {
+    transform: rotate(90deg);
+    transition: transform .06s linear;
+ }
+
+.assigned-task {
+    display: flex;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    margin-right: 1.1rem;
+    height: 5rem;
+    width: calc(100% - 3.1rem);
+    border-radius: 8px 8px 8px 8px;
+    background-color: #152A42;
+    color: #FFFFFF;
+    align-items: center;
+}
+
+.task--finished {
+    background-color: #C0DFA1;
+    color: #152A42;
+    font-weight: 600;
+}
+
+.assigned-task--btn {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: 10%;
+}
+
+.assigned-task--text{
+    font-family: "Space Mono";
+    font-size: 18px;
+    width: 100%;
+    padding: 12px 10px 12px 20px;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    background-color: transparent;
+}
+
+.soft-light{
+    mix-blend-mode: soft-light;
+    background-blend-mode: soft-light;
+}

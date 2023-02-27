@@ -1,5 +1,4 @@
-import { parseDate } from "./helpers";
-import { createDateString } from "./helpers";
+import { parseDate, createDateString } from "./helpers";
 
 export const state = {
     date: {},

@@ -1,7 +1,5 @@
 import * as model from "./model.js";
-import { parseDate } from "./helpers.js";
-import { createDateString } from "./helpers.js";
-import { parseDateToObj } from "./helpers.js";
+import { createDateString, getRelativeDate } from "./helpers.js";
 import currentTaskView from "./view/currentTaskView";
 import todayTaskView from "./view/todayTaskView.js";
 import subTaskViews from "./view/subTaskViews.js";
@@ -73,8 +71,9 @@ const init = function () {
     currentTaskView.addHandlerRemoveStorage(clearAllTasksStorage);
 
     // Render Current for Today
+    const selectedDate = model.state.selectedDate;
     currentTaskView.renderCurrentDate(createDateString(new Date()));
-    if (model.state.date[model.state.selectedDate]) todayTaskView.render(model.state.date[model.state.selectedDate]);
+    if (model.state.date[selectedDate]) todayTaskView.render(model.state.date[selectedDate]);
     currentTaskView.toggleScrollingClass();
 }
 

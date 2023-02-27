@@ -14,7 +14,7 @@ export const parseDate = function (dateObject = new Date()) {
 
     return Number(`${year}${month}${day}`)
 
-}
+};
 
 export const parseDateToObj = function (parsedDate) {
     const year = String(parsedDate).slice(0, 4);
@@ -22,7 +22,7 @@ export const parseDateToObj = function (parsedDate) {
     const day = String(parsedDate).slice(6);
 
     return new Date(year, month, day);
-}
+};
 
 export const createDateString = function (dateObject) {
     const year = dateObject.getFullYear();
@@ -30,7 +30,7 @@ export const createDateString = function (dateObject) {
     const day = dateObject.getDate();
 
     return `${month} ${day}${nthNumber(day)}, ${year}`;
-}
+};
 
 const nthNumber = (number) => {
     if (number > 3 && number < 21) return "th";
@@ -46,6 +46,21 @@ const nthNumber = (number) => {
     }
 };
 
+//Checks if scroll bar is present
 export function scrollbarVisible(element) {
     return element.scrollHeight > element.clientHeight;
-}
+};
+
+
+// Used to get the next or previous date with either a date object or parsed date
+export const getRelativeDate = function (date, nextDate, parsed) {
+    // Initiate Date Object
+    let dateObj;
+    // Set date obj dependent on input date type
+    parsed ? dateObj = parseDateToObj(date) : dateObj = date;
+    // Convert to new date
+    const newDate = new Date(dateObj)
+    newDate.setDate(newDate.getDate() + (nextDate ? 1 : -1))
+    // Return as parsed or not
+    return parsed ? parseDate(newDate) : newDate;
+};

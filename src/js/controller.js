@@ -9,8 +9,8 @@ import subTaskViews from "./view/subTaskViews.js";
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-// Loads Tasks for Today
-const controlCurrentTasks = function () {
+// Controls When Users Select a Different Date
+const controlSelectedDate = function () {
 
 };
 
@@ -20,18 +20,22 @@ const controlExpandTask = function () {
 };
 
 const controlAddTask = function (taskForm) {
+    const selectedDate = model.state.selectedDate;
+
     // Update State
-    model.loadNewTask(taskForm);
+    model.loadNewTask(taskForm, selectedDate);
     // Clear form and rerender today task view
     currentTaskView.clearSubmissionOptions(taskForm);
-    todayTaskView.render(model.state.date[parseDate()]);
+    todayTaskView.render(model.state.date[selectedDate]);
     // Render scrolling class if neccessary
     currentTaskView.toggleScrollingClass();
 };
 
 const controlCheckTask = function (index) {
-    model.state.date[parseDate()][index].checked = !model.state.date[parseDate()][index].checked;
-    todayTaskView.render(model.state.date[parseDate()]);
+    const selectedDate = model.state.selectedDate;
+
+    model.state.date[selectedDate][index].checked = !model.state.date[selectedDate][index].checked;
+    todayTaskView.render(model.state.date[selectedDate]);
     model.persistDateTasks();
 };
 
@@ -70,7 +74,7 @@ const init = function () {
 
     // Render Current for Today
     currentTaskView.renderCurrentDate(createDateString(new Date()));
-    if (model.state.date[parseDate()]) todayTaskView.render(model.state.date[parseDate()]);
+    if (model.state.date[model.state.selectedDate]) todayTaskView.render(model.state.date[model.state.selectedDate]);
     currentTaskView.toggleScrollingClass();
 }
 

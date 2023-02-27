@@ -8,9 +8,9 @@ export const state = {
     selectedDateLong: '',
 }
 
-export const setState = function () {
-    state.selectedDateLong = createDateString(new Date());
-    state.selectedDate = parseDate();
+export const setState = function (dateObj = new Date()) {
+    state.selectedDateLong = createDateString(dateObj);
+    state.selectedDate = parseDate(dateObj);
     state.todayDate = parseDate();
 }
 
@@ -36,14 +36,13 @@ const createTaskObject = function (taskForm, timeOfCreation) {
 
 };
 
-export const loadNewTask = function (taskForm) {
+export const loadNewTask = function (taskForm, selectedDate) {
     //Recieve and Parse Date
     const timeOfCreation = new Date();
-    const parsedDate = parseDate(timeOfCreation);
 
     // Check if Date is existing property and set it, 
-    if (!state.date[parsedDate]) state.date[parsedDate] = []
-    const dateState = state.date[parsedDate];
+    if (!state.date[selectedDate]) state.date[selectedDate] = []
+    const dateState = state.date[selectedDate];
 
     // Create our Task Object and Add It to State
     const taskObject = createTaskObject(taskForm, timeOfCreation)

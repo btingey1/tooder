@@ -9,7 +9,7 @@ export const timeout = function (s) {
 export const parseDate = function (dateObject = new Date()) {
 
     const year = String(dateObject.getFullYear());
-    const month = String(dateObject.getMonth()).padStart(2, '0');
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
     const day = String(dateObject.getDate()).padStart(2, '0');
 
     return Number(`${year}${month}${day}`)
@@ -17,9 +17,11 @@ export const parseDate = function (dateObject = new Date()) {
 };
 
 export const parseDateToObj = function (parsedDate) {
-    const year = String(parsedDate).slice(0, 4);
-    const month = String(parsedDate).slice(4, 6);
-    const day = String(parsedDate).slice(6);
+    const parsedDateAsStr = String(parsedDate)
+
+    const year = parsedDateAsStr.slice(0, 4);
+    const month = `${(+(parsedDateAsStr.slice(4, 6)) - 1)}`.padStart(2, '0');
+    const day = parsedDateAsStr.slice(6);
 
     return new Date(year, month, day);
 };
@@ -63,4 +65,14 @@ export const getRelativeDate = function (date, nextDate, parsed) {
     newDate.setDate(newDate.getDate() + (nextDate ? 1 : -1))
     // Return as parsed or not
     return parsed ? parseDate(newDate) : newDate;
+};
+
+export const shortDateStr = function (parsedDate) {
+
+    const month = String(parsedDate).slice(4, 6);
+    const day = String(parsedDate).slice(6);
+    const year = String(parsedDate).slice(2, 4);
+
+    return `${month}/${day}/${year}`
+
 };

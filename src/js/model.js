@@ -1,16 +1,29 @@
-import { parseDate, createDateString } from "./helpers";
+import { parseDate, createDateString, getRelativeDate, shortDateStr, parseDateToObj } from "./helpers";
 
 export const state = {
     date: {},
     todayDate: '',
+    todayOpt: {
+        yesterday: '',
+        tomorrow: '',
+    },
     selectedDate: '',
-    selectedDateLong: '',
+    selectedOpt: {
+        selectedDateLong: '',
+        nextDate: '',
+        nextDateStr: '',
+        prevDate: '',
+        prevDateStr: '',
+    },
 }
 
 export const setState = function (dateObj = new Date()) {
-    state.selectedDateLong = createDateString(dateObj);
     state.selectedDate = parseDate(dateObj);
-    state.todayDate = parseDate();
+    state.selectedOpt.selectedDateLong = createDateString(dateObj);
+    state.selectedOpt.nextDate = parseDate(getRelativeDate(dateObj, true, false));
+    state.selectedOpt.nextDateStr = shortDateStr(state.selectedOpt.nextDate)
+    state.selectedOpt.prevDate = parseDate(getRelativeDate(dateObj, false, false));
+    state.selectedOpt.prevDateStr = shortDateStr(state.selectedOpt.prevDate);
 }
 
 export const persistDateTasks = function () {
@@ -50,7 +63,10 @@ export const loadNewTask = function (taskForm, selectedDate) {
     persistDateTasks();
 };
 
-export const init = function () {
+export const init = function (dateObj = new Date()) {
+    state.todayDate = parseDate();
+    state.todayOpt.tomorrow = getRelativeDate(state.todayDate, true, true);
+    state.todayOpt.yesterday = getRelativeDate(state.todayDate, false, true);
     const storage = localStorage.getItem('dateTasks');
     if (storage) state.date = JSON.parse(storage);
 };

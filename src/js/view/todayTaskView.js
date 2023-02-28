@@ -25,27 +25,6 @@ class TodayTaskView extends View {
             handler(id)
         })
     }
-
-    _compileMarkUp(taskStates) {
-        const taskArr = [];
-        taskStates.forEach((taskState, i) =>
-            taskState.checked ?
-                taskArr.push(this._generateMarkUp(taskState, i)) :
-                taskArr.unshift(this._generateMarkUp(taskState, i)
-                ));
-        return taskArr.join('')
-    }
-
-    _generateMarkUp(taskState, i) {
-        return `    
-        <div class="assigned-task ${taskState.checked ? "task--finished" : ''}" data-id="${i}" ">
-        <button class="assigned-task--btn"><img src="${taskState.checked ? squarecheck : checkbox}"></button>
-        <div class="assigned-task--text">
-        <p>${taskState.taskText}</p>
-        </div>
-        </div>
-        `
-    }
 }
 
 export default new TodayTaskView();

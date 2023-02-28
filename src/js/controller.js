@@ -1,5 +1,5 @@
 import * as model from "./model.js";
-import { createDateString, getRelativeDate } from "./helpers.js";
+import { createDateString, getRelativeDate, parseDateToObj } from "./helpers.js";
 import currentTaskView from "./view/currentTaskView";
 import todayTaskView from "./view/todayTaskView.js";
 import subTaskViews from "./view/subTaskViews.js";
@@ -37,19 +37,26 @@ const controlCheckTask = function (index) {
     model.persistDateTasks();
 };
 
-// Fills out nearby tasks with a preview of tasks where neccessary
-const controlNearbyTasks = function () {
-
-};
-
 // Handles clicks on nearby tasks
-const controlMoveNearbyTask = function () {
+const controlMoveNearbyTask = function (element) {
 
+    // Check if we are going to tomorrow or yesterday based on our classlist
+    const next = element.classList.contains('sub-content-right');
+
+    // Adjust model selected date
+    next ? model.setState(parseDateToObj(model.state.selectedOpt.nextDate)) : model.setState(parseDateToObj(model.state.selectedOpt.prevDate));
+
+    // Reneder All Tasks
+    const selectedDate = model.state.selectedDate;
+
+    currentTaskView.renderCurrentDate(model.state.selectedOpt.selectedDateLong);
+    model.state.date[selectedDate] ? todayTaskView.render(model.state.date[selectedDate]) : todayTaskView.render('', false);
+    subTaskViews.render(model.state);
+    currentTaskView.toggleScrollingClass();
 };
 
 // Handles clicks on the calendar icon
 const controlCalendarView = function () {
-
 };
 
 // FOR TESTING ----------------------------------
@@ -69,12 +76,19 @@ const init = function () {
     currentTaskView.addHandlerSubmission(controlAddTask);
     todayTaskView.addCheckHandler(controlCheckTask);
     currentTaskView.addHandlerRemoveStorage(clearAllTasksStorage);
+    subTaskViews.addSubTaskHandler(controlMoveNearbyTask);
 
     // Render Current for Today
     const selectedDate = model.state.selectedDate;
-    currentTaskView.renderCurrentDate(createDateString(new Date()));
+    currentTaskView.renderCurrentDate(model.state.selectedOpt.selectedDateLong);
     if (model.state.date[selectedDate]) todayTaskView.render(model.state.date[selectedDate]);
+    subTaskViews.render(model.state);
     currentTaskView.toggleScrollingClass();
+
+    // TESTING
+
+
+    console.log(model.state);
 }
 
 init();

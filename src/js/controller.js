@@ -63,7 +63,7 @@ const controlCalendarView = function () {
 const clearAllTasksStorage = function () {
     model.clearDateTasks();
     todayTaskView.render('', false)
-    currentTaskView.toggleScrollingClass();
+    init();
 }
 
 // Initalize certain values and handlers
@@ -86,8 +86,6 @@ const init = function () {
     currentTaskView.toggleScrollingClass();
 
     // TESTING
-
-
     console.log(model.state);
 }
 

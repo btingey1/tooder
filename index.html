@@ -13,15 +13,15 @@
             <div class="calendar-wrapper hidden">
                 <div class="calendar-header">
                     <div class="calendar-header-exit">
-                        <button class="exit-cal--btn"><img src="src/img/icons/circle-xmark-regular.svg"></button>
+                        <button class="exit-cal--btn"><img class="cal-exit-img--btn" draggable="false" src="src/img/icons/circle-xmark-regular.svg"></button>
                     </div>
                     <div class="calendar-header-title">
-                        <h1 class="main-title-text">Feburary</h1>
+                        <h1 class="main-title-text">March 2023</h1>
                     </div>
                 </div>
                 <div class="calendar-main">
-                    <div class="calendar-next calendar-nav-div">
-                        <button class="cal-nav--btn"><img src="src/img/icons/circle-chevron-left-solid.svg"></button>
+                    <div class="calendar-prev calendar-nav-div">
+                        <button class="cal-nav--btn"><img draggable="false" src="src/img/icons/circle-chevron-left-solid.svg"></button>
                     </div>
                     <div class="calendar-body-wrapper">
                         <div class="calendar-body-header">
@@ -34,24 +34,141 @@
                             <div class="grid-header">Sat</div>
                         </div>
                         <div class="calendar-body-content">
-                            <div class="grid-item">1</div>
-                            <div class="grid-item">2</div>
-                            <div class="grid-item">3</div>
-                            <div class="grid-item">4</div>
-                            <div class="grid-item">5</div>
-                            <div class="grid-item">6</div>
-                            <div class="grid-item">7</div>
-                            <div class="grid-item">8</div>
-                            <div class="grid-item">9</div>
-                            <div class="grid-item">10</div>
-                            <div class="grid-item">11</div>
-                            <div class="grid-item">12</div>
-                            <div class="grid-item">13</div>
-                            <div class="grid-item">14</div>
-                            <div class="grid-item">15</div>
-                            <div class="grid-item">16</div>
-                            <div class="grid-item">17</div>
-                            <div class="grid-item">18</div>
+                            <div class="grid-item cal-today" data-id="20230101">
+                                <div class="cal-cover"></div>
+                                <div class="cal-content-number">1</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished">19</div>
+                                    <div class="cal-task cal-task-assigned">6</div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-cover"></div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item cal-selected">
+                                <div class="cal-cover"></div>
+                                <div class="cal-content-number">3</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished">1</div>
+                                    <div class="cal-task cal-task-assigned">2</div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">5</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">3</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished">1</div>
+                                    <div class="cal-task cal-task-assigned">2</div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">3</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished">1</div>
+                                    <div class="cal-task cal-task-assigned">2</div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">3</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished">1</div>
+                                    <div class="cal-task cal-task-assigned">2</div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">3</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished">1</div>
+                                    <div class="cal-task cal-task-assigned">2</div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item">
+                                <div class="cal-content-number">4</div>
+                                <div class="cal-content-tasks">
+                                    <div class="cal-task cal-task-finished hidden"></div>
+                                    <div class="cal-task cal-task-assigned hidden"></div>
+                                </div>
+                            </div>
+                            <div class="grid-item"></div>
+                            <div class="grid-item"></div>
+                            <div class="grid-item"></div>
+                            <div class="grid-item"></div>
+                            <div class="grid-item"></div>
+                            <div class="grid-item"></div>
+                            <div class="grid-item"></div>
                             <div class="grid-item"></div>
                             <div class="grid-item"></div>
                             <div class="grid-item"></div>
@@ -71,17 +188,17 @@
                             <div class="grid-item"></div>
                         </div>
                     </div>
-                    <div class="calendar-prev calendar-nav-div">
-                        <button class="cal-nav--btn"><img src="src/img/icons/circle-chevron-right-solid.svg"></button>
+                    <div class="calendar-next calendar-nav-div">
+                        <button class="cal-nav--btn"><img draggable="false" src="src/img/icons/circle-chevron-right-solid.svg"></button>
                     </div>
                 </div>
             </div>
             <div class="header">
                 <div class="header-left">
-                    <img class="logo" src="src/img/Logo.svg"> 
+                    <img draggable="false" class="logo" src="src/img/Logo.svg"> 
                 </div>
                 <div class="header-right">
-                    <img class="calendar-icon" src="src/img/icons/calendar-days-solid.svg"> 
+                    <img draggable="false" class="calendar-icon" src="src/img/icons/calendar-days-solid.svg"> 
                 </div>
             </div>
             <div class="body">
@@ -144,7 +261,7 @@
                                     <form class="main-task-form">
                                     <input class="main-text" type="text">
                                     </form>
-                                    <button class="main-task-detail--btn"><img class="main-task-detail--img" src="src/img/icons/angles-right-solid.svg"></button>
+                                    <button class="main-task-detail--btn"><img draggable="false" class="main-task-detail--img" src="src/img/icons/angles-right-solid.svg"></button>
                                 </div>
                             </div>
                         </div>

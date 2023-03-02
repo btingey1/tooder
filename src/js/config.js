@@ -1,0 +1,1 @@
+export const CAL_LENGTH = 42;

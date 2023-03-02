@@ -67,6 +67,18 @@ export const getRelativeDate = function (date, nextDate, parsed) {
     return parsed ? parseDate(newDate) : newDate;
 };
 
+export const getRelativeMonth = function (date, nextMonth, parsed) {
+    // Initiate Date Object
+    let dateObj;
+    // Set date obj dependent on input date type
+    parsed ? dateObj = parseDateToObj(date) : dateObj = date;
+    // Convert to new date
+    const newDate = new Date(dateObj)
+    newDate.setMonth(newDate.getMonth() + (nextMonth ? 1 : -1))
+    // Return as parsed or not
+    return parsed ? parseDate(newDate) : newDate;
+}
+
 export const shortDateStr = function (parsedDate) {
 
     const month = String(parsedDate).slice(4, 6);

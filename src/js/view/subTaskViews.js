@@ -3,9 +3,9 @@ import View from './View';
 
 class SubTaskViews extends View {
     #data;
-    #parentElement = document.querySelectorAll('.body-sub')
-    #prevBody = this.#parentElement[0];
-    #nextBody = this.#parentElement[1];
+    _parentElement = document.querySelectorAll('.body-sub')
+    #prevBody = this._parentElement[0];
+    #nextBody = this._parentElement[1];
 
     // Render previous and next
     render(data) {
@@ -56,7 +56,7 @@ class SubTaskViews extends View {
     // Add Handlers
 
     addSubTaskHandler(handler) {
-        this.#parentElement.forEach(element => {
+        this._parentElement.forEach(element => {
             element.addEventListener('click', function (e) {
                 const contentPrev = e.target.closest('.sub-content-left');
                 const contentNext = e.target.closest('.sub-content-right');

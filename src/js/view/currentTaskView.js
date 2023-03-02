@@ -3,28 +3,12 @@ import { scrollbarVisible } from '../helpers';
 
 class CurrentTaskView extends View {
     #data;
-    #parentElement = document.querySelector('.body-top');
-    #title = this.#parentElement.querySelector('.main-title');
-
-    addHandlerSubmission(handler) {
-        this.#parentElement.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            handler(e.target);
-        });
-    }
-
-    clearSubmissionOptions(taskForm) {
-        const taskArr = [...taskForm]
-        taskArr.forEach(formItem => {
-            formItem.value = '';
-            formItem.blur();
-        });
-    }
+    _parentElement = document.querySelector('.body-top');
+    #title = this._parentElement.querySelector('.main-title');
 
     toggleScrollingClass() {
-        if (scrollbarVisible(this.#parentElement.closest('.body-content-wrapper'))) this.#parentElement.classList.add('scrolling')
-        if (!scrollbarVisible(this.#parentElement.closest('.body-content-wrapper'))) this.#parentElement.classList.remove('scrolling')
+        if (scrollbarVisible(this._parentElement.closest('.body-content-wrapper'))) this._parentElement.classList.add('scrolling')
+        if (!scrollbarVisible(this._parentElement.closest('.body-content-wrapper'))) this._parentElement.classList.remove('scrolling')
     }
 
     renderCurrentDate(dateString) {

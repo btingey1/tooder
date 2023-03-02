@@ -34,7 +34,7 @@ table {
 
 body {
     background-image: url("../img/Noise.png");
-    background-color: 011C3C;
+    background-color: #011C3C;
 }
 
 /*            */
@@ -76,6 +76,7 @@ body {
     padding-top: 1.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    user-select: none;
 }
 
 .body {
@@ -88,7 +89,9 @@ body {
     display: flex;
     flex-direction: column;
     position: absolute;
+    /* background: linear-gradient(180deg, #011C3C -4.55%, #3C4856 8.65%, #465362 12.22%); */
     background-color: #465362;
+    /* background-image: url("../img/Noise.png"); */
     height: 100%;
     width: 100%;
     z-index: 10;
@@ -111,7 +114,8 @@ body {
 
 .body-sub {
     width: 25%;
-    height: 100%; 
+    height: 100%;
+    user-select: none;
 }
 
 .sub-title {
@@ -172,11 +176,14 @@ body {
 .exit-cal--btn {
     background-color: transparent;
     border: transparent;
-    cursor: pointer;
     height: 40px;
     padding-top: 1.5rem;
     padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    padding-right: 1.3rem;
+}
+
+.cal-exit-img--btn {
+    cursor: pointer;
 }
 
 .calendar-header-title {
@@ -200,7 +207,9 @@ body {
 }
 
 .calendar-nav-div:hover {
-    background-color: #61768F;
+    /* background-color: #61768F; */
+    background: linear-gradient(0deg, #61768F 0.18%, rgba(201, 204, 207, 0.02) 83.33%, rgba(217, 217, 217, 0) 91.15%);
+    /* background-image: url("../img/Noise.png"); */
 }
 
 .cal-nav--btn {
@@ -210,7 +219,7 @@ body {
 }
 
 .calendar-body-wrapper {
-    margin-bottom: 2vh;
+    /* margin-bottom: 2vh; */
     width: 80%;
     display: flex;
     flex-direction: column;
@@ -231,9 +240,9 @@ body {
     height: 90%;
     display: grid;
     gap: .2rem;
-    background: radial-gradient(62.71% 83.61% at 50% 50%, rgba(217, 217, 217, 0.79) 0.18%, rgba(217, 217, 217, 0) 100%);
+    background: radial-gradient(55.71% 83.61% at 50% 50%, rgba(217, 217, 217, 0.79) 0.18%, rgba(217, 217, 217, 0) 100%);
     grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1fr);
 }
 
 .grid-header {
@@ -241,6 +250,7 @@ body {
     font-size: 1.75rem;
     color: #ffffff;
     background-color: #465362;
+    /* background-image: url("../img/Noise.png"); */
     display: flex;
     justify-content: center;
     align-items: end;
@@ -253,14 +263,18 @@ body {
     font-size: 1.5rem;
     color: #ffffff;
     background-color: #465362;
+    /* background-image: url("../img/Noise.png"); */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    position: relative;
 }
 
 .grid-item:hover {
     background-color: #61768F;
+    /* background-image: url("../img/Noise.png"); */
     /* border-radius: 3px; */
 }
 
@@ -277,6 +291,7 @@ body {
     height: 40px;
     stroke: white;
     fill:white;
+    cursor: pointer;
 }
 
 .tomorrow {
@@ -428,8 +443,11 @@ input.main-text {
     border: none;
     background-color: transparent;
     width: 4rem;
-    cursor: pointer;
     user-select: none;
+}
+
+.task--btn--img {
+    cursor: pointer;
 }
 
 .assigned-task--text{
@@ -477,3 +495,128 @@ input.main-text {
 .sub-content-left:hover {
     opacity: .5;
 }
+
+/* <div class="cal-content-number">
+1
+</div>
+<div class="cal-content-tasks">
+<div class="cal-finished-task"></div>
+<div class="cal-assigned-task"></div>
+</div> */
+
+.cal-alt-month.grid-item {
+    /* mix-blend-mode: soft-light; */
+    opacity: .45;
+}
+
+.cal-cover {
+    background-color: #31363c;
+    opacity: .5;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.cal-content-number {
+    height: 45%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+
+}
+
+.cal-content-tasks {
+    display: flex;
+    height: 45%;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.2rem;
+    gap: .6rem;
+}
+
+.cal-task {
+    border-radius: 100px;
+    font-size: 1.1rem;
+    height: 1.6rem;
+    width: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #152A42;
+    font-weight: 800;
+    opacity: .5;
+}
+
+.cal-task-finished {
+    background-color: #C0DFA1;
+}
+
+.cal-task-assigned {
+    background-color: #a3a7ac;
+}
+
+.grid-item.cal-today {
+    background-color: #6e757c;
+}
+
+.grid-item.cal-today:hover {
+    background-color: #858b92;
+}
+
+.grid-item.cal-selected {
+    background-color: #012b5f;
+}
+
+.grid-item.cal-selected:hover {
+    background-color: #023672;
+}
+
+.task-delete-button {
+    width: 5%;
+    display: flex;
+    justify-content: end;
+    margin-right: 1rem;
+}
+
+.task-del--btn {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    background-color: transparent;
+    border: transparent;
+    cursor: pointer;
+}
+
+.edit-text {
+    font-family: "Space Mono";
+    font-size: 18px;
+    width: 100%;
+    color: inherit;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    background-color: transparent;
+    font-weight: inherit;
+    padding: 0px;
+}
+
+.edit-text:focus {
+    outline: none;
+    border: none;
+}
+
+.assigned-task--text > p {
+    user-select: none;
+    cursor: text;
+}
+
+.delete--btn--img {
+    user-select: none;
+}
+
+/* <form class="edit-task-form ${finished ? `edit-text-finished` : ``}">
+<input class="edit-text" type="text">
+</form> #152a42 */

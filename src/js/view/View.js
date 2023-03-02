@@ -37,7 +37,7 @@ export default class View {
 
     _generateMarkUp(taskState, i) {
         return `    
-        <div class="assigned-task${taskState.checked ? " task--finished" : ''}" data-id="${i}" data-ed="${taskState.id}" ">
+        <div class="assigned-task${taskState.checked ? " task--finished" : ''}" data-id="${i}" data-ed="${taskState.id}">
         <button class="assigned-task--btn"><img class="task--btn--img" draggable="false" src="${taskState.checked ? squarecheck : checkbox}"></button>
         <div class="assigned-task--text">
         <p>${taskState.taskText}</p>
@@ -61,12 +61,13 @@ export default class View {
             let id;
             let ed;
             if (needID) {
-                id = Number(e.target?.closest('.assigned-task').dataset.id);
-                ed = Number(e.target?.closest('.assigned-task').dataset.ed);
+                id = Number(e.target.closest('.assigned-task').dataset.id);
+                ed = Number(e.target.closest('.assigned-task').dataset.ed);
             }
 
+
             if (event == 'focusout') {
-                return handler(e.target.closest('.edit-task-form'), id)
+                return handler(e.target.closest('.edit-task-form'), id, ed)
             }
 
             handler(e.target, id, ed);

@@ -32,6 +32,10 @@ class TodayTaskView extends View {
 
     }
 
+    hideTasks() {
+        this.toggleHidden(this._parentElement)
+    }
+
     addCheckHandler(handler) {
         this._parentElement.addEventListener('click', function (e) {
             const btn = e.target.closest('.task--btn--img');

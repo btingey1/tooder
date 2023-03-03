@@ -73,5 +73,4 @@ export default class View {
             handler(e.target, id, ed);
         }));
     }
-
 }

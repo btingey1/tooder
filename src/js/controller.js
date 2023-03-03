@@ -23,14 +23,23 @@ const controlExpandTask = function () {
 const controlAddTask = function (taskForm) {
     const selectedDate = model.state.selectedDate;
 
+    if (!taskForm[0].value) return
+
     // Update State
     model.loadNewTask(taskForm, selectedDate);
     // Clear form and rerender today task view
+    if (currentTaskView.checkExpanded()) controlExpandCurDetail();
     currentTaskView.clearSubmissionOptions(taskForm);
     todayTaskView.render(model.state.date[selectedDate]);
-    // Render scrolling class if neccessary
     currentTaskView.toggleScrollingClass();
+
 };
+
+const controlExpandCurDetail = function () {
+    todayTaskView.hideTasks();
+    currentTaskView.renderExpandedTaskView();
+    currentTaskView.toggleScrollingClass();
+}
 
 const controlCheckTask = function (index) {
     const selectedDate = model.state.selectedDate;
@@ -52,7 +61,7 @@ const controlEditText = function (index, textEl) {
     const text = model.state.date[selectedDate][index].taskText;
 
     todayTaskView.renderTextEditForm(textEl, text, finished);
-}
+};
 
 const controlEditSubmission = function (editForm, id, ed) {
     const selectedDate = model.state.selectedDate;
@@ -65,12 +74,12 @@ const controlEditSubmission = function (editForm, id, ed) {
     model.editTaskText(editForm, id);
     todayTaskView.render(model.state.date[selectedDate]);
 
-}
+};
 
 const controlStopEditText = function () {
     const selectedDate = model.state.selectedDate;
     todayTaskView.render(model.state.date[selectedDate]);
-}
+};
 
 // Handles clicks on nearby tasks
 const controlMoveNearbyTask = function (element) {
@@ -88,6 +97,7 @@ const controlMoveNearbyTask = function (element) {
     model.state.date[selectedDate] ? todayTaskView.render(model.state.date[selectedDate]) : todayTaskView.render('', false);
     subTaskViews.render(model.state);
     currentTaskView.toggleScrollingClass();
+    if (currentTaskView.checkExpanded()) controlExpandCurDetail();
 };
 
 // Handles clicks on the calendar icon
@@ -98,12 +108,12 @@ const controlCalendarView = function () {
 
 const controlCloseCalendar = function () {
     calendarView.toggleHidden();
-}
+};
 
 const controlNavCalendar = function (next) {
     model.setCalDates(getRelativeMonth(model.state.calendarDates.curMonth[0], next, true));
     calendarView.renderCal(model.state, false);
-}
+};
 
 const controlCalSelectDate = function (dateID) {
 
@@ -115,16 +125,9 @@ const controlCalSelectDate = function (dateID) {
     model.state.date[selectedDate] ? todayTaskView.render(model.state.date[selectedDate]) : todayTaskView.render('', false);
     subTaskViews.render(model.state);
     currentTaskView.toggleScrollingClass();
-
+    if (currentTaskView.checkExpanded()) controlExpandCurDetail();
     controlCloseCalendar();
-}
-
-// FOR TESTING ----------------------------------
-const clearAllTasksStorage = function () {
-    model.clearDateTasks();
-    todayTaskView.render('', false);
-    init(true);
-}
+};
 
 // Initalize certain values and handlers
 const init = function (clearStorage = false) {
@@ -134,20 +137,18 @@ const init = function (clearStorage = false) {
     model.init();
 
     // Add Handlers
-    if (!clearStorage) {
-        currentTaskView.addHandlerSubmission(controlAddTask);
-        currentTaskView.addHandlerRemoveStorage(clearAllTasksStorage);
-        todayTaskView.addCheckHandler(controlCheckTask);
-        todayTaskView.addDeleteHandler(controlDeleteTask);
-        todayTaskView.addEditTextHandler(controlEditText);
-        todayTaskView.addHandlerSubmission(controlEditSubmission, true, true);
-        todayTaskView.addStopEditHandler(controlStopEditText);
-        subTaskViews.addSubTaskHandler(controlMoveNearbyTask);
-        headerView.addHandlerCalendar(controlCalendarView);
-        calendarView.addHandlerClose(controlCloseCalendar);
-        calendarView.addHandlerNav(controlNavCalendar);
-        calendarView.addHandlerSelectDate(controlCalSelectDate);
-    }
+    currentTaskView.addHandlerSubmission(controlAddTask);
+    currentTaskView.addDetailExpandHandler(controlExpandCurDetail)
+    todayTaskView.addCheckHandler(controlCheckTask);
+    todayTaskView.addDeleteHandler(controlDeleteTask);
+    todayTaskView.addEditTextHandler(controlEditText);
+    todayTaskView.addHandlerSubmission(controlEditSubmission, true, true);
+    todayTaskView.addStopEditHandler(controlStopEditText);
+    subTaskViews.addSubTaskHandler(controlMoveNearbyTask);
+    headerView.addHandlerCalendar(controlCalendarView);
+    calendarView.addHandlerClose(controlCloseCalendar);
+    calendarView.addHandlerNav(controlNavCalendar);
+    calendarView.addHandlerSelectDate(controlCalSelectDate);
 
     // Render Current for Today
     const selectedDate = model.state.selectedDate;

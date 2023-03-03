@@ -39,22 +39,23 @@ export const persistDateTasks = function () {
     localStorage.setItem('taskTotals', JSON.stringify(state.taskTotals));
 };
 
-export const clearDateTasks = function () {
-    localStorage.clear('dateTasks');
-    localStorage.clear('taskTotals');
-    // FOR TESTING  ----------------------------------
-    state.date = {};
-    state.taskTotals = {};
-};
-
 const createTaskObject = function (taskForm, timeOfCreation) {
 
-    const text = taskForm[0].value;
+    const taskTypes = Array.from(taskForm).map(input => {
+        const { id } = input.dataset;
+        return id
+    });
+
+    const text = taskTypes.indexOf('name');
+    const location = taskTypes.indexOf('location');
+    const time = taskTypes.indexOf('time');
 
     return {
         id: timeOfCreation.getTime(),
         parsedDate: parseDate(timeOfCreation),
-        taskText: text,
+        taskText: taskForm[text].value,
+        taskLocation: taskForm[location].value ? taskForm[location].value : null,
+        taskTime: taskForm[time].value ? taskForm[time].value : null,
         checked: false,
     }
 

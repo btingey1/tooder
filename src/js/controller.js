@@ -15,31 +15,23 @@ const controlSelectedDate = function () {
 
 };
 
-// Expands Task Options For Current Task
-const controlExpandTask = function () {
-
-};
-
 const controlAddTask = function (taskForm) {
     const selectedDate = model.state.selectedDate;
 
     if (!taskForm[0].value) return
 
     // Update State
-    model.loadNewTask(taskForm, selectedDate);
+    if (currentTaskView.checkExpanded()) model.loadNewTask(taskForm, selectedDate, true);
+    if (!currentTaskView.checkExpanded()) model.loadNewTask(taskForm, selectedDate);
     // Clear form and rerender today task view
     if (currentTaskView.checkExpanded()) controlExpandCurDetail();
     currentTaskView.clearSubmissionOptions(taskForm);
     todayTaskView.render(model.state.date[selectedDate]);
     currentTaskView.toggleScrollingClass();
-
+    model.updateTaskForms('', true);
+    if (currentTaskView.checkAddDetailExpanded()) controlAddDetailExpander();
 };
 
-const controlExpandCurDetail = function () {
-    todayTaskView.hideTasks();
-    currentTaskView.renderExpandedTaskView();
-    currentTaskView.toggleScrollingClass();
-}
 
 const controlCheckTask = function (index) {
     const selectedDate = model.state.selectedDate;
@@ -65,6 +57,7 @@ const controlEditText = function (index, textEl) {
 
 const controlEditSubmission = function (editForm, id, ed) {
     const selectedDate = model.state.selectedDate;
+    if (!editForm) return
     if (!editForm[0]) return
     if (!model.state.date[selectedDate]?.[id]?.id) return
     if (model.state.date[selectedDate][id].id !== ed) return
@@ -129,8 +122,24 @@ const controlCalSelectDate = function (dateID) {
     controlCloseCalendar();
 };
 
+const controlExpandCurDetail = function () {
+    currentTaskView.renderExpandedTaskView();
+    todayTaskView.noScrollTasks();
+    currentTaskView.toggleScrollingClass();
+}
+
+const controlAddDetailExpander = function () {
+    currentTaskView.renderDetailAdders(model.state.activeForms);
+};
+
+const controlAddDetail = function (target) {
+    controlAddDetailExpander();
+    // Instead of just statically updating model with target, I need to first render my forms, and get an array of outstanding task form ids, and return that array to updateTaskForms
+    model.updateTaskForms([target]);
+}
+
 // Initalize certain values and handlers
-const init = function (clearStorage = false) {
+const init = function () {
     // Initialize State
     model.setState();
     model.setCalDates();
@@ -138,7 +147,9 @@ const init = function (clearStorage = false) {
 
     // Add Handlers
     currentTaskView.addHandlerSubmission(controlAddTask);
-    currentTaskView.addDetailExpandHandler(controlExpandCurDetail)
+    currentTaskView.addDetailExpandHandler(controlExpandCurDetail);
+    currentTaskView.addAddDetailExpanderHandler(controlAddDetailExpander);
+    currentTaskView.addAddDetailHandler(controlAddDetail);
     todayTaskView.addCheckHandler(controlCheckTask);
     todayTaskView.addDeleteHandler(controlDeleteTask);
     todayTaskView.addEditTextHandler(controlEditText);

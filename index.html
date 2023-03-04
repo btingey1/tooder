@@ -13,7 +13,7 @@
             <div class="calendar-wrapper hidden">
                 <div class="calendar-header">
                     <div class="calendar-header-exit">
-                        <button class="exit-cal--btn"><img class="cal-exit-img--btn" draggable="false" src="src/img/icons/circle-xmark-regular.svg"></button>
+                        <div class="exit-cal--btn"><img class="cal-exit-img--btn" draggable="false" src="src/img/icons/circle-xmark-regular.svg"></div>
                     </div>
                     <div class="calendar-header-title">
                         <h1 class="main-title-text">March 2023</h1>
@@ -107,13 +107,24 @@
                             <div class="main-current">
                                 <div class="main-task">
                                     <form class="main-task-form">
-                                    <div class="form-desc hidden"><span>Task Name <span class="asterisk">*</span></span></div>
                                     <input class="main-text main-desc-attr" type="text" data-id="name">
-                                    <div class="form-desc hidden"><span>Location</span></div>
+                                    <div class="main-form-add-attr">
+                                        <div class="main-form-add-attr-btn-div">
+                                        <img draggable="false" class="main-form-add--btn" src="src/img/icons/circle-xmark-rotate.svg">
+                                        </div>
+                                        <div class="add-option-container close-add-opt">
+                                            <!-- <img draggable="false" class="add-opt-tag add-opt-item" src="src/img/icons/tag-solid.svg">
+                                            <img draggable="false" class="add-opt-time add-opt-item" src="src/img/icons/clock-regular.svg">
+                                            <img draggable="false" class="add-opt-location add-opt-item" src="src/img/icons/location-crosshairs-solid.svg">
+                                            <img draggable="false" class="add-opt-file add-opt-item" src="src/img/icons/file-regular.svg"> -->
+                                        </div>
+                                    </div>
+                                    <input type="submit" class="hidden"  data-id="submission">
+                                    <!-- <div class="form-desc hidden"><span>Task Name <span class="asterisk">*</span></span></div> -->
+                                    <!-- <div class="form-desc hidden"><span>Location</span></div>
                                     <input class="main-text main-location--attr hidden" type="text" data-id="location">
                                     <div class="form-desc hidden"><span>Time</span></div>
-                                    <input class="main-text main-time--attr hidden" type="text" data-id="time">
-                                    <input type="submit" class="hidden"  data-id="submission">
+                                    <input class="main-text main-time--attr hidden" type="text" data-id="time"> -->
                                     </form>
                                     <button class="main-task-detail--btn"><img draggable="false" class="main-task-detail--img" src="src/img/icons/angles-right-solid.svg"></button>
                                 </div>

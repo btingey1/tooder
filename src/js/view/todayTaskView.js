@@ -32,14 +32,25 @@ class TodayTaskView extends View {
 
     }
 
-    hideTasks() {
-        this.toggleHidden(this._parentElement)
+    noScrollTasks() {
+        // this.toggleHidden(this._parentElement);
+        const container = this._parentElement.closest('.body-content-wrapper');
+        const sibling = container.querySelector('.body-top');
+
+
+
+        this._parentElement.classList.toggle('no-scroll');
+        if (this._parentElement.classList.contains('no-scroll')) this._parentElement.style.height = (container.clientHeight - sibling.clientHeight)
+        else this._parentElement.style.height = '';
     }
 
     addCheckHandler(handler) {
         this._parentElement.addEventListener('click', function (e) {
             const btn = e.target.closest('.task--btn--img');
+            const container = e.target.closest('.main-current-tasks');
+
             if (!btn) return
+            if (container.classList.contains('no-scroll')) return
 
             const { id } = btn.closest('.assigned-task').dataset;
 
@@ -49,9 +60,11 @@ class TodayTaskView extends View {
 
     addDeleteHandler(handler) {
         this._parentElement.addEventListener('click', function (e) {
-            const btn = e.target.closest('.task-del--btn');
+            const btn = e.target.closest('.task-delete-button');
+            const container = e.target.closest('.main-current-tasks');
 
             if (!btn) return
+            if (container.classList.contains('no-scroll')) return
 
             const { id } = btn.closest('.assigned-task').dataset;
 
@@ -62,9 +75,11 @@ class TodayTaskView extends View {
     addEditTextHandler(handler) {
         this._parentElement.addEventListener('dblclick', function (e) {
             const textEl = e.target.closest('.assigned-task--text');
+            const container = e.target.closest('.main-current-tasks');
 
             if (!textEl) return
             if (e.target.closest('.edit-task-form')) return
+            if (container.classList.contains('no-scroll')) return
 
             const { id } = textEl.closest('.assigned-task').dataset;
 

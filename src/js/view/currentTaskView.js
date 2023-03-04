@@ -1,5 +1,11 @@
 import View from './View';
 import { scrollbarVisible } from '../helpers';
+import { mark } from 'regenerator-runtime';
+
+import tagIcon from 'url:../../img/icons/tag-solid.svg';
+import timeIcon from 'url:../../img/icons/clock-regular.svg';
+import locationIcon from 'url:../../img/icons/location-crosshairs-solid.svg';
+import fileIcon from 'url:../../img/icons/file-regular.svg';
 
 class CurrentTaskView extends View {
     #data;
@@ -34,11 +40,11 @@ class CurrentTaskView extends View {
         contentWrapper.classList.toggle('no-scroll')
         icon.classList.toggle('main-task-detail--clicked');
         mainTaskBtn.classList.toggle('main-task-detail--btn-expanded'); // Color
-        this._parentElement.classList.toggle('body-top-expanded'); // Expand Body
+        // this._parentElement.classList.toggle('body-top-expanded'); // Expand Body
         formDesc.forEach(el => el.classList.toggle('hidden')); // Reveal descriptions
         mainTexts.forEach(el => { if (!el.classList.contains('main-desc-attr')) el.classList.toggle('hidden') }); // Reveal form inputs
         mainTexts.forEach(el => el.classList.toggle('main-text-expanded')); // Apply form input styling
-        mainCurrent.classList.toggle('main-current-expanded'); //Expand form container
+        // mainCurrent.classList.toggle('main-current-expanded'); //Expand form container
         mainTask.classList.toggle('main-task-expanded'); // Expand form div
         mainTaskForm.classList.toggle('main-task-form-expanded'); // Turn form into flex
         mainTexts.forEach(el => { if (el.classList.contains('main-desc-attr')) el.focus() });
@@ -47,6 +53,29 @@ class CurrentTaskView extends View {
         if (!contentWrapper.classList.contains('no-scroll')) {
             mainTexts.forEach(el => { if (!el.classList.contains('main-desc-attr')) el.value = '' });
         }
+
+    }
+
+    renderDetailAdders(activeFormsObj) {
+        const toggleBtn = this._parentElement.querySelector('.main-form-add--btn');
+        const detailContainer = this._parentElement.querySelector('.add-option-container');
+
+        toggleBtn.classList.toggle('main-form-add--btn-clicked');
+
+        // Need to recieve list of currently active form types and only render icons for currently inactive ones
+        const markup = `
+        ${!activeFormsObj.tag ? `<img draggable="false" class="add-opt-tag add-opt-item" data-id="tag" src="${tagIcon}">` : ''}
+        ${!activeFormsObj.time ? `<img draggable="false" class="add-opt-time add-opt-item" data-id="time" src="${timeIcon}">` : ''}
+        ${!activeFormsObj.location ? `<img draggable="false" class="add-opt-location add-opt-item" data-id="location" src="${locationIcon}">` : ''}
+        ${!activeFormsObj.file ? `<img draggable="false" class="add-opt-file add-opt-item" data-id="file" src="${fileIcon}">` : ''}
+        `
+        this._clear(detailContainer)
+        detailContainer.insertAdjacentHTML('afterbegin', markup)
+        detailContainer.classList.toggle('close-add-opt');
+
+    }
+
+    renderDetailForm(formType) {
 
     }
 
@@ -59,8 +88,33 @@ class CurrentTaskView extends View {
         })
     }
 
+    addAddDetailExpanderHandler(handler) {
+        this._parentElement.addEventListener('click', function (e) {
+            const btn = e.target.closest('.main-form-add-attr-btn-div')
+            if (!btn) return
+
+            handler()
+        })
+    }
+
+    addAddDetailHandler(handler) {
+        this._parentElement.addEventListener('click', function (e) {
+            const btn = e.target.closest('.add-opt-item')
+
+            if (!btn) return
+
+            const dataId = btn.dataset.id
+
+            handler(dataId)
+        })
+    }
+
     checkExpanded() {
-        return this._parentElement.querySelector('.main-current-expanded');
+        return this._parentElement.querySelector('.main-task-expanded');
+    }
+
+    checkAddDetailExpanded() {
+        return this._parentElement.querySelector('.main-form-add--btn-clicked');
     }
 
 }

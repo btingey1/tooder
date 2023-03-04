@@ -25,26 +25,26 @@ export default class View {
         });
     }
 
-    _compileMarkUp(taskStates) {
+    _compileMarkUp(taskStates, mainView = true) {
         const taskArr = [];
         taskStates.forEach((taskState, i) =>
             taskState.checked ?
-                taskArr.push(this._generateMarkUp(taskState, i)) :
-                taskArr.unshift(this._generateMarkUp(taskState, i)
+                taskArr.push(this._generateMarkUp(taskState, i, mainView)) :
+                taskArr.unshift(this._generateMarkUp(taskState, i, mainView)
                 ));
         return taskArr.join('')
     }
 
-    _generateMarkUp(taskState, i) {
+    _generateMarkUp(taskState, i, mainView = true) {
         return `    
         <div class="assigned-task${taskState.checked ? " task--finished" : ''}" data-id="${i}" data-ed="${taskState.id}">
-        <button class="assigned-task--btn"><img class="task--btn--img" draggable="false" src="${taskState.checked ? squarecheck : checkbox}"></button>
-        <div class="assigned-task--text">
+        <button class="assigned-task--btn task--btn"><img class="task--btn--img task---btn" draggable="false" src="${taskState.checked ? squarecheck : checkbox}"></button>
+        <div class="assigned-task--text ${mainView ? '' : 'no-hover'}">
         <p>${taskState.taskText}</p>
         </div>
-        <div class="task-delete-button">
-            <button class="task-del--btn"><img class="delete--btn--img" draggable="false" src="${taskState.checked ? finishDeleteIcon : deleteIcon}"></button>
-        </div>
+        ${mainView ? `
+        <button class="task-delete-button task--btn"><img class="delete--btn--img" draggable="false" src="${taskState.checked ? finishDeleteIcon : deleteIcon}"></button>
+        ` : ''}
         </div>
         `
     }

@@ -74,7 +74,7 @@ class SubTaskViews extends View {
 
     _generateMarkup(dateID) {
         const dateTasks = this.#data.date[dateID];
-        const markup = dateTasks ? this._compileMarkUp(dateTasks) : this._generateEmptyMarkup();
+        const markup = dateTasks ? this._compileMarkUp(dateTasks, false) : this._generateEmptyMarkup();
         return markup;
     }
 

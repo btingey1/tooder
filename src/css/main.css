@@ -150,7 +150,7 @@ body {
     display: flex;
     flex-direction: column;
     top:0;
-    height: 33%;
+    /* height: 33%; */
     position: sticky;
     /* transition: height .04s linear; */
 }
@@ -176,10 +176,13 @@ body {
 .exit-cal--btn {
     background-color: transparent;
     border: transparent;
-    height: 40px;
+    height: fit-content;
+    width: 5%;
     padding-top: 1.5rem;
-    padding-left: 1.5rem;
     padding-right: 1.3rem;
+    padding-left: 0rem;
+    display: flex;
+    justify-content: end;
 }
 
 .cal-exit-img--btn {
@@ -367,7 +370,7 @@ h2.main-title-text {
 
 .main-task {
     display: flex;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     margin-left: 2rem;
     margin-bottom: 2rem;
     margin-right: 1.1rem;
@@ -377,7 +380,6 @@ h2.main-title-text {
     background-color: #D9D9D9;
     justify-content: center;
     overflow-y: hidden;
-    /* transition: height .05s linear; */
 }
 
 .main-task:focus-within {
@@ -433,7 +435,7 @@ input.main-text {
 }
 
 .main-task-detail--img {
-    transition: transform .12s linear;
+    transition: transform .15s linear;
 }
 
 .main-task-detail--clicked {
@@ -595,6 +597,9 @@ input.main-text {
     height: 100%;
     transition: background-color .1s linear;
     border-radius: 0px 8px 8px 0;
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
 }
 
 .task-delete-button:hover {
@@ -650,7 +655,7 @@ input.main-text {
 }
 
 .main-task.main-task-expanded {
-    height: 90%;
+    height: auto;
     overflow-y: hidden;
 }
 
@@ -661,12 +666,14 @@ input.main-text {
 }
 
 .main-text.main-text-expanded {
-    height: 10%;
+    /* height: 10%; */
     width: 90%;
-    background-color: #465362;
-    border-radius: 8px;
-    color: #ffffff;
-    font-size: 1rem;
+    background-color: transparent;
+    border-radius: 4px;
+    color: black;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    border-bottom: 1px solid #152A42;
 }
 
 .form-desc {
@@ -680,3 +687,84 @@ input.main-text {
     font-weight: 400;
     font-size: 1.1rem;
 }
+
+.no-hover {
+    pointer-events: none;
+}
+
+.main-form-add-attr {
+    width: 90%;
+    align-content: start;
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.main-form-add-attr-btn-div {
+    width: 12%;
+    align-content: start;
+    display: flex;
+    margin-top: 2rem;
+}
+
+.main-form-add--btn {
+    rotate: 45deg;
+    transition: rotate .15s linear;
+    user-select: none;
+    cursor: pointer;
+}
+
+.main-form-add--btn-clicked{
+    rotate: -90deg;
+}
+
+.add-option-container {
+    width: 88%;
+    margin-top: 2rem;
+    gap: 1rem;
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+    transition: width .2s linear;
+    user-select: none;
+}
+
+.add-option-container.close-add-opt {
+    width: 0px;
+}
+
+.add-opt-item {
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+.add-opt-item:first-child{
+    margin-left: 1rem;
+}
+
+.main-current-tasks > .assigned-task:first-child{
+    margin-top: 1rem;
+}
+
+.main-current-tasks.no-scroll {
+    overflow-y: hidden;
+    margin-top: 0px;
+    filter: blur(.06rem);
+    transition: filter .25s linear;
+}
+
+.no-scroll > .assigned-task > .task--btn > .task---btn {
+    cursor: default;
+}
+
+.no-scroll > .assigned-task > .task--btn {
+    cursor: default;
+}
+
+.no-scroll > .assigned-task > .task--btn:hover {
+    background-color: transparent;
+}
+
+.no-scroll > .assigned-task > .assigned-task--text > p {
+ cursor: default;
+}
+

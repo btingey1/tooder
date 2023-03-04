@@ -23,6 +23,12 @@ export const state = {
         nextMonth: [],
     },
     taskTotals: {},
+    activeForms: {
+        tag: false,
+        time: false,
+        location: false,
+        file: false,
+    },
 }
 
 export const setState = function (dateObj = new Date()) {
@@ -39,29 +45,42 @@ export const persistDateTasks = function () {
     localStorage.setItem('taskTotals', JSON.stringify(state.taskTotals));
 };
 
-const createTaskObject = function (taskForm, timeOfCreation) {
-
+const createTaskObject = function (taskForm, timeOfCreation, expanded) {
+    // Map out all the indexes of all ids of the forms
     const taskTypes = Array.from(taskForm).map(input => {
         const { id } = input.dataset;
         return id
     });
 
+    // Match ids to indexes
     const text = taskTypes.indexOf('name');
     const location = taskTypes.indexOf('location');
     const time = taskTypes.indexOf('time');
 
-    return {
+    // Return if somehow there is no task name
+    if (!taskForm[text]) return
+
+    // If not expanded, return text only
+    if (!expanded) return {
         id: timeOfCreation.getTime(),
         parsedDate: parseDate(timeOfCreation),
         taskText: taskForm[text].value,
-        taskLocation: taskForm[location].value ? taskForm[location].value : null,
-        taskTime: taskForm[time].value ? taskForm[time].value : null,
+        checked: false,
+    }
+
+    // If expanded return full object
+    if (expanded) return {
+        id: timeOfCreation.getTime(),
+        parsedDate: parseDate(timeOfCreation),
+        taskText: taskForm[text].value,
+        taskLocation: taskForm[location]?.value ? taskForm[location].value : null,
+        taskTime: taskForm[time]?.value ? taskForm[time].value : null,
         checked: false,
     }
 
 };
 
-export const loadNewTask = function (taskForm, selectedDate) {
+export const loadNewTask = function (taskForm, selectedDate, expanded = false) {
     //Recieve and Parse Date
     const timeOfCreation = new Date();
 
@@ -71,7 +90,8 @@ export const loadNewTask = function (taskForm, selectedDate) {
     const dateState = state.date[selectedDate];
 
     // Create our Task Object and Add It to State
-    const taskObject = createTaskObject(taskForm, timeOfCreation)
+    const taskObject = createTaskObject(taskForm, timeOfCreation, expanded);
+    if (!taskObject) return
     dateState.push(taskObject);
     updateTaskTotals(selectedDate)
 
@@ -121,6 +141,17 @@ const updateTaskTotals = function (selectedDate, newTask = true, finished = fals
         state.taskTotals[selectedDate].assigned += (finished ? -1 : 1);
     }
 };
+
+export const updateTaskForms = function (taskNames, reset = false) {
+    if (taskNames) {
+        taskNames.forEach(taskName => state.activeForms[taskName] = !state.activeForms[taskName]);
+    }
+
+    if (!reset) return
+    for (const property in state.activeForms) {
+        state.activeForms[property] = false;
+    }
+}
 
 // Set new calendar dates
 export const setCalDates = function (parsedDate = state.todayDate) {

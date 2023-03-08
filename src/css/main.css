@@ -296,6 +296,7 @@ body {
 }
 
 .calendar-icon {
+    width: 35px;
     height: 40px;
     stroke: white;
     fill:white;
@@ -331,7 +332,7 @@ body {
     opacity: 30%;
     border-radius: 0px 8px 0px 0px;
     width: 88%;
-    background-color: 465362;
+    background-color: #465362;
     cursor: pointer;
     overflow: hidden;
 }
@@ -344,7 +345,7 @@ body {
     opacity: 30%;
     border-radius: 8px 0px 0px 0px;
     width: 88%;
-    background-color: 465362;
+    background-color: #465362;
     cursor: pointer;
 }
 

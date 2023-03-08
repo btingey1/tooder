@@ -5,6 +5,7 @@
         <title>tooder</title>
         <link href=' http://fonts.googleapis.com/css?family=Space+Grotesk' rel='stylesheet' type='text/css'>
         <link href=' http://fonts.googleapis.com/css?family=Space+Mono' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
 
         <script type="module" src="src/js/controller.js"></script>
     </head>
@@ -54,9 +55,9 @@
                     <div class="sub-title yesterday">
                         <h1>...<span class="sub-title-text">Yesterday</span></h1>
                     </div>
-                    <div class="sub-content-wrapper">
+                    <div class="sub-content-wrapper sub-wrapper-left">
                         <div class="sub-content-left">
-                            <div class="sub-content-container soft-light">
+                            <div class="sub-content-container soft-light content-left">
                                 <div class="assigned-task">
                                     <button class="assigned-task--btn"><img src="src/img/icons/checkbox-unfilled.svg"></button>
                                     <div class="assigned-task--text">
@@ -104,22 +105,31 @@
                                 <!-- <h1 class="main-title-text">Feburary 19th, 2023</h1>
                                 <h2 class="main-title-text">What are we working on today</h1> -->
                             </div>
-                            <div class="main-current">
+                            <div draggable="false" class="main-current">
                                 <div class="main-task">
-                                    <form class="main-task-form">
+                                    <form class="main-task-form" enctype="multipart/form-data">
                                     <input class="main-text main-desc-attr" type="text" data-id="name">
+                                    <div class="input-container">
+                                        <input class="opt-input main-tag-attr hidden option" type="text" data-id="tag" maxlength="40" placeholder="tags (comma separated)">
+                                        <input class="opt-input main-time-attr hidden option" type="time" data-id="time">
+                                    </div>
+                                    <div id="map" class="map-view hidden option" data-id="location"></div>
+                                    <label for="file-upload" class="custom-file-upload option hidden" data-id="file">
+                                        File Upload
+                                    </label>
+                                    <input type="file" class="opt-input main-file-attr" id="file-upload" data-id="file">
                                     <div class="main-form-add-attr">
                                         <div class="main-form-add-attr-btn-div">
                                         <img draggable="false" class="main-form-add--btn" src="src/img/icons/circle-xmark-rotate.svg">
                                         </div>
                                         <div class="add-option-container close-add-opt">
-                                            <!-- <img draggable="false" class="add-opt-tag add-opt-item" src="src/img/icons/tag-solid.svg">
+                                            <!-- <img draggable="false" class="add-opt-tag add-opt-item" src="src/img/icons/tag-solid.svg" >
                                             <img draggable="false" class="add-opt-time add-opt-item" src="src/img/icons/clock-regular.svg">
                                             <img draggable="false" class="add-opt-location add-opt-item" src="src/img/icons/location-crosshairs-solid.svg">
                                             <img draggable="false" class="add-opt-file add-opt-item" src="src/img/icons/file-regular.svg"> -->
                                         </div>
                                     </div>
-                                    <input type="submit" class="hidden"  data-id="submission">
+                                    <input type="submit" class="hidden"  data-id="submission"/>
                                     <!-- <div class="form-desc hidden"><span>Task Name <span class="asterisk">*</span></span></div> -->
                                     <!-- <div class="form-desc hidden"><span>Location</span></div>
                                     <input class="main-text main-location--attr hidden" type="text" data-id="location">
@@ -175,9 +185,9 @@
                     <div class="sub-title tomorrow">
                         <h1><span class="sub-title-text">Tomorrow</span>...</h1>
                     </div>
-                    <div class="sub-content-wrapper">
+                    <div class="sub-content-wrapper sub-wrapper-right">
                         <div class="sub-content-right">
-                            <div class="sub-content-container soft-light">
+                            <div class="sub-content-container soft-light content-right">
                                 <div class="assigned-task">
                                     <button class="assigned-task--btn"><img src="src/img/icons/checkbox-unfilled.svg"></button>
                                     <div class="assigned-task--text">

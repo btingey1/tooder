@@ -67,6 +67,18 @@ export const getRelativeDate = function (date, nextDate, parsed) {
     return parsed ? parseDate(newDate) : newDate;
 };
 
+export const getRelativeDateWeek = function (date, nextWeek, parsed) {
+    // Initiate Date Object
+    let dateObj;
+    // Set date obj dependent on input date type
+    parsed ? dateObj = parseDateToObj(date) : dateObj = date;
+    // Convert to new date
+    const newDate = new Date(dateObj)
+    newDate.setDate(newDate.getDate() + (nextWeek ? 7 : -7))
+    // Return as parsed or not
+    return parsed ? parseDate(newDate) : newDate;
+};
+
 export const getRelativeMonth = function (date, nextMonth, parsed) {
     // Initiate Date Object
     let dateObj;
@@ -88,3 +100,21 @@ export const shortDateStr = function (parsedDate) {
     return `${month}/${day}/${year}`
 
 };
+
+export const toTitleCase = function (str) {
+    const lowerCaseStr = str.toLowerCase().trim()
+    const strArray = lowerCaseStr.split(' ');
+    const titleCase = strArray.map(str => str[0].toUpperCase() + str.slice(1)).join(' ');
+    return titleCase;
+}
+
+export const convertMilitaryToStandard = function (time) {
+    let hour = +(time.slice(0, 2));
+    let minute = time.slice(3, 5);
+    let am = true
+    if (hour > 12) {
+        hour -= 12;
+        am = false;
+    }
+    return `${String(hour).padStart(2, '0')}:${minute}${am ? 'AM' : 'PM'}`
+}

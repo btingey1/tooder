@@ -32,14 +32,16 @@ class TodayTaskView extends View {
 
     }
 
-    noScrollTasks() {
+    noScrollTasks(toggle = true) {
         // this.toggleHidden(this._parentElement);
         const container = this._parentElement.closest('.body-content-wrapper');
         const sibling = container.querySelector('.body-top');
 
 
 
-        this._parentElement.classList.toggle('no-scroll');
+        if (toggle) {
+            this._parentElement.classList.toggle('no-scroll')
+        } else this._parentElement.classList.add('no-scroll');
         if (this._parentElement.classList.contains('no-scroll')) this._parentElement.style.height = (container.clientHeight - sibling.clientHeight)
         else this._parentElement.style.height = '';
     }
@@ -95,6 +97,19 @@ class TodayTaskView extends View {
 
         //     handler()
         // })
+    }
+
+    fixLargeTextDivs() {
+        const tasks = this._parentElement.querySelectorAll('.assigned-task');
+
+        tasks.forEach(task => {
+            const text = task.querySelector('.direct-text');
+            const { lineHeight } = getComputedStyle(text);
+            const lineHeightParsed = parseInt(lineHeight.split('px')[0]);
+            const amountOfLinesTilAdjust = 2;
+
+            if (text.offsetHeight >= (lineHeightParsed * amountOfLinesTilAdjust)) task.classList.add('wrapped-text')
+        })
     }
 }
 

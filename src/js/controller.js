@@ -1,43 +1,43 @@
 import * as model from "./model.js";
 import { createDateString, getRelativeDate, parseDateToObj, getRelativeMonth } from "./helpers.js";
+import { ALT_COORDS } from "./config.js";
 import currentTaskView from "./view/currentTaskView";
 import todayTaskView from "./view/todayTaskView.js";
 import subTaskViews from "./view/subTaskViews.js";
 import calendarView from "./view/calendarView.js";
 import headerView from "./view/headerView.js";
+import headerView from "./view/headerView.js";
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import headerView from "./view/headerView.js";
+import { control } from "leaflet";
 
-// Controls When Users Select a Different Date
-const controlSelectedDate = function () {
 
-};
-
-const controlAddTask = function (taskForm) {
+const controlAddTask = async function (taskForm) {
     const selectedDate = model.state.selectedDate;
 
     if (!taskForm[0].value) return
 
     // Update State
-    if (currentTaskView.checkExpanded()) model.loadNewTask(taskForm, selectedDate, true);
-    if (!currentTaskView.checkExpanded()) model.loadNewTask(taskForm, selectedDate);
+    if (currentTaskView.checkExpanded()) await model.loadNewTask(taskForm, selectedDate, true);
+    if (!currentTaskView.checkExpanded()) await model.loadNewTask(taskForm, selectedDate);
     // Clear form and rerender today task view
     if (currentTaskView.checkExpanded()) controlExpandCurDetail();
     currentTaskView.clearSubmissionOptions(taskForm);
     todayTaskView.render(model.state.date[selectedDate]);
+    todayTaskView.fixLargeTextDivs();
     currentTaskView.toggleScrollingClass();
     model.updateTaskForms('', true);
     if (currentTaskView.checkAddDetailExpanded()) controlAddDetailExpander();
+    currentTaskView.clearAllOptForms();
 };
-
 
 const controlCheckTask = function (index) {
     const selectedDate = model.state.selectedDate;
 
     model.updateChecked(selectedDate, index)
     todayTaskView.render(model.state.date[selectedDate]);
+    todayTaskView.fixLargeTextDivs();
 };
 
 const controlDeleteTask = function (index) {
@@ -66,6 +66,7 @@ const controlEditSubmission = function (editForm, id, ed) {
 
     model.editTaskText(editForm, id);
     todayTaskView.render(model.state.date[selectedDate]);
+    todayTaskView.fixLargeTextDivs();
 
 };
 
@@ -89,8 +90,13 @@ const controlMoveNearbyTask = function (element) {
     currentTaskView.renderCurrentDate(model.state.selectedOpt.selectedDateLong);
     model.state.date[selectedDate] ? todayTaskView.render(model.state.date[selectedDate]) : todayTaskView.render('', false);
     subTaskViews.render(model.state);
+    if (model.state.date[selectedDate]) todayTaskView.fixLargeTextDivs();
     currentTaskView.toggleScrollingClass();
     if (currentTaskView.checkExpanded()) controlExpandCurDetail();
+    if (currentTaskView.checkAddDetailExpanded()) controlAddDetailExpander();
+    model.updateTaskForms('', true);
+    currentTaskView.clearAllOptForms();
+    currentTaskView.clearSubmissionOptions(currentTaskView.getTaskForm());
 };
 
 // Handles clicks on the calendar icon
@@ -117,9 +123,13 @@ const controlCalSelectDate = function (dateID) {
     currentTaskView.renderCurrentDate(model.state.selectedOpt.selectedDateLong);
     model.state.date[selectedDate] ? todayTaskView.render(model.state.date[selectedDate]) : todayTaskView.render('', false);
     subTaskViews.render(model.state);
+    todayTaskView.fixLargeTextDivs();
     currentTaskView.toggleScrollingClass();
     if (currentTaskView.checkExpanded()) controlExpandCurDetail();
     controlCloseCalendar();
+    model.updateTaskForms('', true);
+    currentTaskView.clearAllOptForms();
+    currentTaskView.clearSubmissionOptions(currentTaskView.getTaskForm());
 };
 
 const controlExpandCurDetail = function () {
@@ -132,11 +142,40 @@ const controlAddDetailExpander = function () {
     currentTaskView.renderDetailAdders(model.state.activeForms);
 };
 
-const controlAddDetail = function (target) {
+const controlAddDetail = async function (target) {
     controlAddDetailExpander();
     // Instead of just statically updating model with target, I need to first render my forms, and get an array of outstanding task form ids, and return that array to updateTaskForms
+    currentTaskView.renderDetailForm(target);
     model.updateTaskForms([target]);
+    todayTaskView.noScrollTasks(false);
+    if (currentTaskView.checkMap()) return;
+    if (target == 'location') {
+        controlPosition();
+        todayTaskView.noScrollTasks(false);
+    }
+};
+
+const controlPosition = function () {
+    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(controlMap, controlMapNoGeo);
+};
+
+const controlMapNoGeo = function () {
+    controlMap({ coords: { latitude: ALT_COORDS[0], longitude: ALT_COORDS[1] } })
 }
+
+const controlMap = function (curPosition) {
+    currentTaskView.initMap(curPosition.coords, controlAddMarkerPopup);
+};
+
+const controlAddMarkerPopup = async function () {
+    const markerPos = currentTaskView.getCurMarker().getLatLng();
+    const city = await model.returnCity(markerPos.lat, markerPos.lng);
+    currentTaskView.createMarkerPopup(city);
+};
+
+const controlUpload = function () {
+    currentTaskView.renderUploaded()
+};
 
 // Initalize certain values and handlers
 const init = function () {
@@ -149,6 +188,7 @@ const init = function () {
     currentTaskView.addHandlerSubmission(controlAddTask);
     currentTaskView.addDetailExpandHandler(controlExpandCurDetail);
     currentTaskView.addAddDetailExpanderHandler(controlAddDetailExpander);
+    currentTaskView.addUploadHandler(controlUpload);
     currentTaskView.addAddDetailHandler(controlAddDetail);
     todayTaskView.addCheckHandler(controlCheckTask);
     todayTaskView.addDeleteHandler(controlDeleteTask);
@@ -165,11 +205,13 @@ const init = function () {
     const selectedDate = model.state.selectedDate;
     currentTaskView.renderCurrentDate(model.state.selectedOpt.selectedDateLong);
     if (model.state.date[selectedDate]) todayTaskView.render(model.state.date[selectedDate]);
+    if (model.state.date[selectedDate]) todayTaskView.fixLargeTextDivs();
     subTaskViews.render(model.state);
     currentTaskView.toggleScrollingClass();
 
     // TESTING
     console.log(model.state);
+
 }
 
 init();

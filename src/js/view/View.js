@@ -1,7 +1,14 @@
 import checkbox from 'url:../../img/icons/checkbox-unfilled.svg';
 import squarecheck from 'url:../../img/icons/square-check-solid.svg';
-import deleteIcon from 'url:../../img/icons/x-solid.svg'
-import finishDeleteIcon from 'url:../../img/icons/x-solid-finished.svg'
+import deleteIcon from 'url:../../img/icons/x-solid.svg';
+import finishDeleteIcon from 'url:../../img/icons/x-solid-finished.svg';
+import fileIcon from 'url:../../img/icons/file-regular-small.svg';
+import finishFileIcon from 'url:../../img/icons/file-regular-small-finish.svg';
+import mapIcon from 'url:../../img/icons/location-crosshairs-small.svg';
+import finishMapIcon from 'url:../../img/icons/location-crosshairs-small-finish.svg';
+
+
+import { convertMilitaryToStandard } from '../helpers';
 
 export default class View {
     _parentElement;
@@ -39,14 +46,29 @@ export default class View {
         return `    
         <div class="assigned-task${taskState.checked ? " task--finished" : ''}" data-id="${i}" data-ed="${taskState.id}">
         <button class="assigned-task--btn task--btn"><img class="task--btn--img task---btn" draggable="false" src="${taskState.checked ? squarecheck : checkbox}"></button>
+        <div class="center-view">
+        <div class="time-view">${taskState.taskTime ? convertMilitaryToStandard(taskState.taskTime) : ''}</div>
         <div class="assigned-task--text ${mainView ? '' : 'no-hover'}">
-        <p>${taskState.taskText}</p>
+        <p class="direct-text">${taskState.taskText}</p>
+        </div>
+        <div class="tag-view-container">
+        ${taskState.taskTag ? this._renderTaskTags(taskState.taskTag) : ''}
+        </div>
         </div>
         ${mainView ? `
+        <div class='end-buttons'>
+        ${taskState.taskFile ? `<a class="file-download-button" href="${taskState.taskFile}" target="_blank"><img draggable="false" src="${taskState.checked ? finishFileIcon : fileIcon}"></a>` : ''}
+        ${taskState.taskCoords ? `<a title="${taskState.taskLocation ? taskState.taskLocation : ''}" class="location-visit-button" href="${'https://www.google.com/maps/place/' + taskState.taskCoords}" target="_blank"><img draggable="false" src="${taskState.checked ? finishMapIcon : mapIcon}"></a>` : ''}
         <button class="task-delete-button task--btn"><img class="delete--btn--img" draggable="false" src="${taskState.checked ? finishDeleteIcon : deleteIcon}"></button>
+        </div>
         ` : ''}
         </div>
         `
+    }
+
+    _renderTaskTags(tagArr) {
+        const markupArr = tagArr.map(tag => `<div class="tag-view" data-tag="${tag}">${tag}</div>`);
+        return markupArr.join('')
     }
 
     // Should probably refactor later, need to exclude all todayView buttons

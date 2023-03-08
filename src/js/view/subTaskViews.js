@@ -13,8 +13,8 @@ class SubTaskViews extends View {
         this.#data = data;
 
         // Select our sub-body content
-        const prevContainer = this.#prevBody.querySelector('.sub-content-container');
-        const nextContainer = this.#nextBody.querySelector('.sub-content-container');
+        const prevContainer = this.#prevBody.querySelector('.sub-content-left');
+        const nextContainer = this.#nextBody.querySelector('.sub-content-right');
 
         // Generate Markup
 
@@ -74,7 +74,7 @@ class SubTaskViews extends View {
 
     _generateMarkup(dateID) {
         const dateTasks = this.#data.date[dateID];
-        const markup = dateTasks ? this._compileMarkUp(dateTasks, false) : this._generateEmptyMarkup();
+        const markup = dateTasks ? `<div class="sub-content-container">${this._compileMarkUp(dateTasks, false)}</div>` : this._generateEmptyMarkup();
         return markup;
     }
 

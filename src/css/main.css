@@ -310,28 +310,40 @@ body {
 .sub-content-wrapper {
     height: calc(85% - 1rem);
     user-select: none; 
+    display:flex
+}
+
+.sub-wrapper-right {
+    justify-content: end;
+}
+
+.sub-wrapper-left {
+    justify-content: start;
 }
 
 .sub-content-left {
-    position: fixed;
-    align-items: center;
-    right: 80vw;
+    /* position: fixed; */
+    /* align-items: center; */
+    /* right: 80vw; */
+    display: flex;
+    justify-content: end;
     height: 100%;
     opacity: 30%;
-    border-radius: 8px 8px 0px 0px;
-    width: 45rem;
+    border-radius: 0px 8px 0px 0px;
+    width: 88%;
     background-color: 465362;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .sub-content-right {
-    position: fixed;
+    /* position: fixed; */
     align-items: center;
-    left: 80vw;
+    /* left: 80vw; */
     height: 100%;
     opacity: 30%;
-    border-radius: 8px 8px 0px 0px;
-    width: 45rem;
+    border-radius: 8px 0px 0px 0px;
+    width: 88%;
     background-color: 465362;
     cursor: pointer;
 }
@@ -491,25 +503,25 @@ input.main-text {
     background-blend-mode: soft-light;
 }
 
+.sub-content-container {
+    /* width: 100%; */
+}
+
 .sub-content-container > .assigned-task {
     flex-direction: row;
     width: auto;
     margin: 2rem;
     justify-items: end;
+    width: 30vw;
 }
 
 .no-render {
     display: flex;
     font-size: 10rem;
     height: 75%;
-    width: 60%;
+    width: 100%;
     align-items: center;
     justify-content: center;
-}
-
-.sub-content-left > .sub-content-container > .no-render {
-    justify-content: end;  
-    width: 80%;
 }
 
 .sub-content-right:hover {
@@ -590,7 +602,7 @@ input.main-text {
 }
 
 .task-delete-button {
-    width: 8%;
+    width: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -622,6 +634,7 @@ input.main-text {
     font-family: "Space Mono";
     font-size: 18px;
     width: 100%;
+    height: 18px;
     color: inherit;
     border-top-style: hidden;
     border-right-style: hidden;
@@ -666,12 +679,12 @@ input.main-text {
 }
 
 .main-text.main-text-expanded {
-    /* height: 10%; */
+    height: auto;
     width: 90%;
     background-color: transparent;
     border-radius: 4px;
     color: black;
-    font-size: 1.2rem;
+    font-size: 18px;
     margin-top: 1rem;
     border-bottom: 1px solid #152A42;
 }
@@ -700,7 +713,7 @@ input.main-text {
 }
 
 .main-form-add-attr-btn-div {
-    width: 12%;
+    width: 3.5rem;
     align-content: start;
     display: flex;
     margin-top: 2rem;
@@ -718,7 +731,7 @@ input.main-text {
 }
 
 .add-option-container {
-    width: 88%;
+    width: 20rem;
     margin-top: 2rem;
     gap: 1rem;
     display: flex;
@@ -738,7 +751,7 @@ input.main-text {
 }
 
 .add-opt-item:first-child{
-    margin-left: 1rem;
+    margin-left: .5rem;
 }
 
 .main-current-tasks > .assigned-task:first-child{
@@ -768,3 +781,153 @@ input.main-text {
  cursor: default;
 }
 
+.input-container {
+    width: 88%;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.opt-input {
+    height: 2rem;
+    border: transparent;
+    background-color: white;
+    outline: none;
+    border-radius: 4px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-family: "Space Mono";
+    font-size: 14px;
+    margin-top: 1.5rem;
+}
+
+.main-tag-attr {
+    width: 200%;
+}
+
+.main-time-attr {
+    width: 100%;
+}
+
+.map-view {
+    width: 88%;
+    height: 16rem;
+    margin-top: 1.5rem;
+    border: 3px solid white;
+    border-radius: 4px;
+}
+
+.leaflet-popup-content {
+    font-family: 'Space Mono';
+}
+
+.main-file-attr {
+    width: 90%;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    /* border: 1px solid #ccc; */
+    display: flex;
+    cursor: pointer;
+    width: 88%;
+    margin-top: 1.5rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Space Mono';
+    background-color: white;
+    border-radius: 4px;
+    user-select: none;
+}
+
+.custom-file-upload.file-uploaded {
+    background-color: #c0dfa1;
+}
+
+.time-view{
+    background-color: #9591b4;
+    font-size: 14px;
+    border-radius: 5px;
+    width: max-content;
+    height: 14px;
+    user-select: none;
+}
+
+.tag-view{
+    background-color: #b491a0;
+    font-size: 14px;
+    border-radius: 5px;
+    width: max-content;
+}
+
+.center-view{
+    font-family: "Space Mono";
+    font-size: 18px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    background-color: transparent;
+}
+
+.tag-view-container{
+    display: flex;
+    gap: 0.6rem;
+    height: 14px;
+    user-select: none;
+}
+
+.file-download-button {
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    transition: background-color .1s linear;
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+.file-download-button:hover {
+    background-color: #00773269;
+}
+
+.location-visit-button {
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    transition: background-color .1s linear;
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+.location-visit-button:hover {
+    background-color: #776f0069;
+}
+
+.end-buttons {
+    display: flex;
+    height: 100%;
+    width: 30%;
+    justify-content: end;
+}
+
+.sub-content-container > .assigned-task > .center-view > .assigned-task--text {
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+
+.assigned-task.wrapped-text {
+    height: 6rem;
+}

@@ -1,6 +1,8 @@
 import View from './View';
 import { scrollbarVisible } from '../helpers';
+import { GEO_API_KEY } from '../config';
 import { mark } from 'regenerator-runtime';
+import * as L from 'leaflet';
 
 import tagIcon from 'url:../../img/icons/tag-solid.svg';
 import timeIcon from 'url:../../img/icons/clock-regular.svg';
@@ -10,6 +12,9 @@ import fileIcon from 'url:../../img/icons/file-regular.svg';
 class CurrentTaskView extends View {
     #data;
     _parentElement = document.querySelector('.body-top');
+    _curMarker;
+    _map;
+    _currentPos;
     #title = this._parentElement.querySelector('.main-title');
 
     toggleScrollingClass() {
@@ -25,7 +30,7 @@ class CurrentTaskView extends View {
 
         this._clear(this.#title);
         this.#title.insertAdjacentHTML('afterbegin', markup)
-    }
+    };
 
     renderExpandedTaskView() {
         const icon = this._parentElement.querySelector('.main-task-detail--img');
@@ -54,13 +59,13 @@ class CurrentTaskView extends View {
             mainTexts.forEach(el => { if (!el.classList.contains('main-desc-attr')) el.value = '' });
         }
 
-    }
+    };
 
     renderDetailAdders(activeFormsObj) {
         const toggleBtn = this._parentElement.querySelector('.main-form-add--btn');
         const detailContainer = this._parentElement.querySelector('.add-option-container');
 
-        toggleBtn.classList.toggle('main-form-add--btn-clicked');
+        if (!activeFormsObj.tag || !activeFormsObj.time || !activeFormsObj.location || !activeFormsObj.file) toggleBtn.classList.toggle('main-form-add--btn-clicked');
 
         // Need to recieve list of currently active form types and only render icons for currently inactive ones
         const markup = `
@@ -71,13 +76,81 @@ class CurrentTaskView extends View {
         `
         this._clear(detailContainer)
         detailContainer.insertAdjacentHTML('afterbegin', markup)
-        detailContainer.classList.toggle('close-add-opt');
+        if (!activeFormsObj.tag || !activeFormsObj.time || !activeFormsObj.location || !activeFormsObj.file) detailContainer.classList.toggle('close-add-opt');
 
-    }
+    };
 
     renderDetailForm(formType) {
+        const form = this._parentElement.querySelector(`[data-id=${formType}]`);
 
+        form.classList.toggle('hidden');
+    };
+
+    renderUploaded() {
+        const uploadBtn = this._parentElement.querySelector('.custom-file-upload');
+
+        uploadBtn.classList.add('file-uploaded');
     }
+
+    clearAllOptForms() {
+        const forms = this._parentElement.querySelectorAll('.option');
+
+        forms.forEach(form => {
+            form.classList.add('hidden');
+            form.value = '';
+            form.classList.remove('file-uploaded');
+        });
+
+        this.clearMap();
+    }
+
+    initMap(currentPos, popupHandler) {
+        const view = this;
+        this._currentPos = currentPos
+
+        const mapOptions = {
+            attributionControl: false,
+            closePopupOnClick: false,
+            zoomControl: false,
+        };
+
+        this._map = L.map('map', mapOptions).setView([currentPos.latitude, currentPos.longitude], 14);
+
+        L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(this._map);
+
+        this._map.on('click', function (e) {
+            if (view._curMarker) view.clearMarker()
+            const latlng = e.latlng;
+            const marker = L.marker([latlng.lat, latlng.lng]).addTo(view._map);
+            view._curMarker = marker;
+            popupHandler(marker);
+        });
+    };
+
+    createMarkerPopup(city) {
+        const options = {
+            closeButton: false,
+            closeOnEscapeKey: false,
+            autoClose: false,
+        }
+
+        this._curMarker.bindPopup(city, options).openPopup();
+    };
+
+    clearMap() {
+        if (this._curMarker) {
+            this._curMarker.remove();
+            this._curMarker = '';
+        };
+        if (this._map) this._map.setView([this._currentPos.latitude, this._currentPos.longitude], 14);
+    };
+
+    clearMarker() {
+        this._curMarker.remove();
+    };
 
     addDetailExpandHandler(handler) {
         this._parentElement.addEventListener('click', function (e) {
@@ -86,7 +159,7 @@ class CurrentTaskView extends View {
 
             handler();
         })
-    }
+    };
 
     addAddDetailExpanderHandler(handler) {
         this._parentElement.addEventListener('click', function (e) {
@@ -95,7 +168,7 @@ class CurrentTaskView extends View {
 
             handler()
         })
-    }
+    };
 
     addAddDetailHandler(handler) {
         this._parentElement.addEventListener('click', function (e) {
@@ -107,15 +180,38 @@ class CurrentTaskView extends View {
 
             handler(dataId)
         })
+    };
+
+    addUploadHandler(handler) {
+        this._parentElement.addEventListener('change', function (e) {
+            const upload = e.target.closest('.main-file-attr')
+
+            if (!upload) return;
+
+            handler();
+        })
     }
+
+    getCurMarker() {
+        return this._curMarker;
+    };
+
+    getTaskForm() {
+        return this._parentElement.querySelector('.main-task-form');
+    };
+
+    checkMap() {
+        return this._map;
+    };
 
     checkExpanded() {
         return this._parentElement.querySelector('.main-task-expanded');
-    }
+    };
 
     checkAddDetailExpanded() {
         return this._parentElement.querySelector('.main-form-add--btn-clicked');
-    }
+    };
+
 
 }
 

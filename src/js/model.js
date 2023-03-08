@@ -1,5 +1,6 @@
-import { parseDate, createDateString, getRelativeDate, shortDateStr, parseDateToObj } from "./helpers";
-import { CAL_LENGTH } from "./config";
+import { parseDate, createDateString, getRelativeDate, shortDateStr, parseDateToObj, toTitleCase, getRelativeDateWeek } from "./helpers";
+import { CAL_LENGTH, FILE_API_KEY, FILE_URL } from "./config";
+
 
 export const state = {
     date: {},
@@ -28,6 +29,8 @@ export const state = {
         time: false,
         location: false,
         file: false,
+        city: false,
+        coords: false,
     },
 }
 
@@ -45,7 +48,7 @@ export const persistDateTasks = function () {
     localStorage.setItem('taskTotals', JSON.stringify(state.taskTotals));
 };
 
-const createTaskObject = function (taskForm, timeOfCreation, expanded) {
+const createTaskObject = async function (taskForm, timeOfCreation, expanded) {
     // Map out all the indexes of all ids of the forms
     const taskTypes = Array.from(taskForm).map(input => {
         const { id } = input.dataset;
@@ -54,8 +57,12 @@ const createTaskObject = function (taskForm, timeOfCreation, expanded) {
 
     // Match ids to indexes
     const text = taskTypes.indexOf('name');
-    const location = taskTypes.indexOf('location');
+    // const location = taskTypes.indexOf('location');
     const time = taskTypes.indexOf('time');
+    const tag = taskTypes.indexOf('tag');
+    const file = taskTypes.indexOf('file');
+
+    const fileURL = taskForm[file].value ? await processFile(taskForm[file].files[0]) : '';
 
     // Return if somehow there is no task name
     if (!taskForm[text]) return
@@ -73,24 +80,27 @@ const createTaskObject = function (taskForm, timeOfCreation, expanded) {
         id: timeOfCreation.getTime(),
         parsedDate: parseDate(timeOfCreation),
         taskText: taskForm[text].value,
-        taskLocation: taskForm[location]?.value ? taskForm[location].value : null,
+        taskLocation: state.activeForms.city ? state.activeForms.city : null,
+        taskCoords: state.activeForms.coords ? state.activeForms.coords : null,
         taskTime: taskForm[time]?.value ? taskForm[time].value : null,
+        taskTag: taskForm[tag]?.value ? taskForm[tag].value.split(',').map(tag => tag.trim()) : null,
+        taskFile: taskForm[file].value ? fileURL : null,
         checked: false,
     }
 
 };
 
-export const loadNewTask = function (taskForm, selectedDate, expanded = false) {
+export const loadNewTask = async function (taskForm, selectedDate, expanded = false) {
     //Recieve and Parse Date
     const timeOfCreation = new Date();
 
     // Check if Date is existing property and set it, 
-    if (!state.date[selectedDate]) state.date[selectedDate] = []
+    if (!state.date[selectedDate]) state.date[selectedDate] = [];
     if (!state.taskTotals[selectedDate]) state.taskTotals[selectedDate] = { assigned: 0, finished: 0 }
     const dateState = state.date[selectedDate];
 
     // Create our Task Object and Add It to State
-    const taskObject = createTaskObject(taskForm, timeOfCreation, expanded);
+    const taskObject = await createTaskObject(taskForm, timeOfCreation, expanded);
     if (!taskObject) return
     dateState.push(taskObject);
     updateTaskTotals(selectedDate)
@@ -163,6 +173,47 @@ export const setCalDates = function (parsedDate = state.todayDate) {
     state.calendarDates.curMonthStr = `${newDate.toLocaleString("default", { month: "long" })} ${newDate.getFullYear()}`
 }
 
+// Don't actually need this
+// const recieveFile = function (file) {
+//     const reader = new FileReader();
+//     reader.onloadend = function () {
+//         console.log('Encoded Base 64 File String:', reader.result);
+//         const data = (reader.result).split(',')[1];
+//         const binaryBlob = atob(data);
+//         console.log('Encoded Binary File String:', binaryBlob);
+//         processFile(binaryBlob);
+//     }
+//     reader.readAsDataURL(file);
+// }
+
+const processFile = async function (file) {
+    const fileData = new Blob([file], { type: file.type });
+
+    const formData = new FormData();
+    formData.append('file', fileData, 'test.png');
+    formData.append('expires', `${getRelativeDateWeek(state.todayDate, true, true)}`);
+    formData.append('maxDownloads', '1');
+    formData.append('autoDelete', 'True');
+
+    const res = await fetch(FILE_URL, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': FILE_API_KEY,
+        },
+        body: formData,
+    });
+
+    if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    return data.link;
+
+};
+
 // Generate all parsed dates for a given month including appropriate ones from before and after. Recieves first day of month
 const generateCalDates = function (dateObj) {
     const prevContainer = [];
@@ -191,6 +242,24 @@ const generateCalDates = function (dateObj) {
     }
 
     return { prevContainer, curContainer, nextContainer }
+};
+
+export const returnCity = async function (lat, lng) {
+    state.activeForms.coords = `${lat},${lng}`;
+
+    const url = `https://geocode.xyz/${lat},${lng}?geoit=json`;
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const city = toTitleCase(data.city);
+
+        state.activeForms.city = city;
+
+        return city;
+
+    } catch {
+        return 'Marker'
+    }
 }
 
 export const init = function (dateObj = new Date()) {

@@ -503,10 +503,6 @@ input.main-text {
     background-blend-mode: soft-light;
 }
 
-.sub-content-container {
-    /* width: 100%; */
-}
-
 .sub-content-container > .assigned-task {
     flex-direction: row;
     width: auto;
@@ -855,6 +851,7 @@ input[type="file"] {
     width: max-content;
     height: 14px;
     user-select: none;
+    margin-left: 8px;;
 }
 
 .tag-view{
@@ -867,7 +864,7 @@ input[type="file"] {
 .center-view{
     font-family: "Space Mono";
     font-size: 18px;
-    width: 70%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     border-top-style: hidden;
@@ -882,6 +879,7 @@ input[type="file"] {
     gap: 0.6rem;
     height: 14px;
     user-select: none;
+    padding-left: 8px;
 }
 
 .file-download-button {

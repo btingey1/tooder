@@ -190,7 +190,7 @@ const processFile = async function (file) {
     const fileData = new Blob([file], { type: file.type });
 
     const formData = new FormData();
-    formData.append('file', fileData, 'test.png');
+    formData.append('file', fileData, file.name);
     formData.append('expires', `${getRelativeDateWeek(state.todayDate, true, true)}`);
     formData.append('maxDownloads', '1');
     formData.append('autoDelete', 'True');

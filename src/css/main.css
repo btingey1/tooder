@@ -403,7 +403,7 @@ input.main-text {
     font-family: "Space Mono";
     font-size: 18px;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     padding: 12px 10px 12px 20px;
     border-top-style: hidden;
     border-right-style: hidden;
@@ -680,7 +680,7 @@ input.main-text {
 
 .main-text.main-text-expanded {
     height: auto;
-    width: 90%;
+    width: 100%;
     background-color: transparent;
     border-radius: 4px;
     color: black;
@@ -803,6 +803,8 @@ input.main-text {
 
 .main-tag-attr {
     width: 200%;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 .main-time-attr {
@@ -932,4 +934,14 @@ input[type="file"] {
 
 .assigned-task.wrapped-text {
     height: 6rem;
+}
+
+.main-text-container {
+    display: flex;
+    height: 100%;
+    width: 90%;
+}
+
+.main-text-container.main-text-container-expanded{
+    height: auto;
 }

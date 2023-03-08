@@ -34,7 +34,7 @@ class CurrentTaskView extends View {
     renderExpandedTaskView() {
         const icon = this._parentElement.querySelector('.main-task-detail--img');
         const mainTaskBtn = this._parentElement.querySelector('.main-task-detail--btn');
-        const mainCurrent = this._parentElement.querySelector('.main-current');
+        const mainTextContainer = this._parentElement.querySelector('.main-text-container');
         const mainTask = this._parentElement.querySelector('.main-task');
         const mainTaskForm = this._parentElement.querySelector('.main-task-form');
         const mainTexts = this._parentElement.querySelectorAll('.main-text');
@@ -48,6 +48,7 @@ class CurrentTaskView extends View {
         formDesc.forEach(el => el.classList.toggle('hidden')); // Reveal descriptions
         mainTexts.forEach(el => { if (!el.classList.contains('main-desc-attr')) el.classList.toggle('hidden') }); // Reveal form inputs
         mainTexts.forEach(el => el.classList.toggle('main-text-expanded')); // Apply form input styling
+        mainTextContainer.classList.toggle('main-text-container-expanded')
         // mainCurrent.classList.toggle('main-current-expanded'); //Expand form container
         mainTask.classList.toggle('main-task-expanded'); // Expand form div
         mainTaskForm.classList.toggle('main-task-form-expanded'); // Turn form into flex

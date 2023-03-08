@@ -35,11 +35,10 @@ class TodayTaskView extends View {
         const sibling = container.querySelector('.body-top');
 
 
-
         if (toggle) {
             this._parentElement.classList.toggle('no-scroll')
         } else this._parentElement.classList.add('no-scroll');
-        if (this._parentElement.classList.contains('no-scroll')) this._parentElement.style.height = (container.clientHeight - sibling.clientHeight)
+        if (this._parentElement.classList.contains('no-scroll')) this._parentElement.style.height = `${(container.clientHeight - sibling.clientHeight)}px`
         else this._parentElement.style.height = '';
     }
 

@@ -1,6 +1,5 @@
 import View from './View';
 import { scrollbarVisible } from '../helpers';
-import { GEO_API_KEY } from '../config';
 import { mark } from 'regenerator-runtime';
 import * as L from 'leaflet';
 

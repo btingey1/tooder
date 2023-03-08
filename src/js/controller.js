@@ -1,5 +1,5 @@
 import * as model from "./model.js";
-import { createDateString, getRelativeDate, parseDateToObj, getRelativeMonth } from "./helpers.js";
+import { parseDateToObj, getRelativeMonth } from "./helpers.js";
 import { ALT_COORDS } from "./config.js";
 import currentTaskView from "./view/currentTaskView";
 import todayTaskView from "./view/todayTaskView.js";
@@ -10,7 +10,6 @@ import headerView from "./view/headerView.js";
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import { control } from "leaflet";
 
 
 const controlAddTask = async function (taskForm) {
@@ -209,7 +208,7 @@ const init = function () {
     subTaskViews.render(model.state);
     currentTaskView.toggleScrollingClass();
 
-
+    // Preload icons
     currentTaskView.preLoadImg(currentTaskView.getTaskViewImages());
     currentTaskView.preLoadImg(currentTaskView.getViewImages());
 }

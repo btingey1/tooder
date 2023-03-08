@@ -481,6 +481,9 @@ input.main-text {
     background-color: transparent;
     width: 4.5rem;
     user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .task--btn--img {

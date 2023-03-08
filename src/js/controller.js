@@ -208,6 +208,10 @@ const init = function () {
     if (model.state.date[selectedDate]) todayTaskView.fixLargeTextDivs();
     subTaskViews.render(model.state);
     currentTaskView.toggleScrollingClass();
+
+
+    currentTaskView.preLoadImg(currentTaskView.getTaskViewImages());
+    currentTaskView.preLoadImg(currentTaskView.getViewImages());
 }
 
 init();

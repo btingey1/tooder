@@ -212,6 +212,9 @@ class CurrentTaskView extends View {
         return this._parentElement.querySelector('.main-form-add--btn-clicked');
     };
 
+    getTaskViewImages() {
+        return [tagIcon, timeIcon, locationIcon, fileIcon]
+    }
 
 }
 

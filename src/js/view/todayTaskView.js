@@ -1,8 +1,5 @@
 import View from './View';
 
-import checkbox from 'url:../../img/icons/checkbox-unfilled.svg';
-import squarecheck from 'url:../../img/icons/square-check-solid.svg';
-
 class TodayTaskView extends View {
     #data;
     _parentElement = document.querySelector('.main-current-tasks');

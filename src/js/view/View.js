@@ -95,4 +95,15 @@ export default class View {
             handler(e.target, id, ed);
         }));
     }
+
+    getViewImages() {
+        return [checkbox, squarecheck, deleteIcon, finishDeleteIcon, fileIcon, finishFileIcon, mapIcon, finishMapIcon]
+    }
+
+    preLoadImg(srcArr) {
+        srcArr.forEach(src => {
+            let img = new Image();
+            img.src = src;
+        })
+    }
 }

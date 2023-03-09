@@ -46,11 +46,6 @@ export const setState = function (dateObj = new Date()) {
     state.selectedOpt.prevDateStr = shortDateStr(state.selectedOpt.prevDate);
 }
 
-// export const persistDateTasks = function () {
-//     localStorage.setItem('dateTasks', JSON.stringify(state.date));
-//     localStorage.setItem('taskTotals', JSON.stringify(state.taskTotals));
-// };
-
 const createTaskObject = async function (taskForm, timeOfCreation, expanded) {
     // Map out all the indexes of all ids of the forms
     const taskTypes = Array.from(taskForm).map(input => {
@@ -106,15 +101,12 @@ export const loadNewTask = async function (taskForm, selectedDate, expanded = fa
     const taskObject = await createTaskObject(taskForm, timeOfCreation, expanded);
     if (!taskObject) return
 
-    // updateTaskTotals(selectedDate);
-    // persistDateTasks();
 
     const id = await pb.attempUploadTask(taskObject);
     taskObject.id = id;
     dateState.push(taskObject);
 };
 
-// THIS MIGHT NOT WORK IF TASKS ARE DEEPLY NESTED
 export const deleteTask = async function (index, selectedDate) {
     const finished = state.date[selectedDate][index].checked;
     const newSelectedDateArr = state.date[selectedDate].slice(0);
@@ -126,8 +118,6 @@ export const deleteTask = async function (index, selectedDate) {
     updateTaskTotals(selectedDate, false, finished, true);
     state.date[selectedDate] = newSelectedDateArr;
     if (state.date[selectedDate].length == 0) delete state.date[selectedDate];
-
-    // persistDateTasks();
 }
 
 export const editTaskText = async function (taskForm, id) {

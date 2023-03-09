@@ -4,7 +4,7 @@ import { async } from 'regenerator-runtime';
 import { POCKET_BASE_API, MAIN_URL } from './config';
 
 export const pb = new PocketBase(POCKET_BASE_API);
-const redirectUrl = MAIN_URL; // replace with MAIN_URL
+const redirectUrl = MAIN_URL;
 
 
 export const addAuthLink = async function () {

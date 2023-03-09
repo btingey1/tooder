@@ -1,6 +1,6 @@
 import * as model from "./model.js";
 import { parseDateToObj, getRelativeMonth, timeout } from "./helpers.js";
-import { ALT_COORDS } from "./config.js";
+import { ALT_COORDS, MAIN_URL } from "./config.js";
 import currentTaskView from "./view/currentTaskView";
 import todayTaskView from "./view/todayTaskView.js";
 import subTaskViews from "./view/subTaskViews.js";
@@ -22,6 +22,7 @@ const controlAddTask = async function (taskForm) {
     // Update State
     if (currentTaskView.checkExpanded()) {
         currentTaskView.toggleLoadingState();
+        todayTaskView.noScrollTasks(false);
         currentTaskView.clearFocus();
         await model.loadNewTask(taskForm, selectedDate, true)
         currentTaskView.toggleLoadingState();
@@ -185,7 +186,7 @@ const controlUpload = function () {
 
 const controlAttemptLogout = async function () {
     await pb.attemptLogOut();
-    window.location = 'http://127.0.0.1:1234/';
+    window.location = MAIN_URL;
 };
 
 const controlAuthView = async function () {
@@ -204,6 +205,7 @@ const init = async function () {
     if (!pb.pb.authStore.isValid) {
         try {
             await pb.attemptAuth();
+            window.location = MAIN_URL;
         } catch {
             console.log('User Not Signed In');
         }

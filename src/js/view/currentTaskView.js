@@ -87,7 +87,11 @@ class CurrentTaskView extends View {
 
     toggleLoadingState() {
         const spinner = this._parentElement.querySelector('.current-task-spinner')
-        this.clearAllOptForms();
+        const forms = this._parentElement.querySelectorAll('.option');
+        forms.forEach(form => {
+            form.classList.toggle('hiding-form-item');
+            form.classList.remove('file-uploaded');
+        });
         spinner.classList.toggle('hidden')
     }
 

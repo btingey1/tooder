@@ -1031,3 +1031,10 @@ input[type="file"] {
     height: 18px;
     cursor: help;
 }
+
+.hiding-form-item {
+    position: absolute; 
+    left: -9999px; 
+    width: 1px; 
+    height: 1px;
+}

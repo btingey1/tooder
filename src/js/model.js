@@ -96,6 +96,7 @@ export const loadNewTask = async function (taskForm, selectedDate, expanded = fa
     if (!state.date[selectedDate]) state.date[selectedDate] = [];
     if (!state.taskTotals[selectedDate]) state.taskTotals[selectedDate] = { assigned: 0, finished: 0 }
     const dateState = state.date[selectedDate];
+    updateTaskTotals(selectedDate, true);
 
     // Create our Task Object and Add It to State
     const taskObject = await createTaskObject(taskForm, timeOfCreation, expanded);

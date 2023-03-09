@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html googleeb46c0db308e548c.html"
   },
   "author": "",
   "license": "ISC",

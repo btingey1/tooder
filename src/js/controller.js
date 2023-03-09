@@ -1,5 +1,5 @@
 import * as model from "./model.js";
-import { parseDateToObj, getRelativeMonth } from "./helpers.js";
+import { parseDateToObj, getRelativeMonth, timeout } from "./helpers.js";
 import { ALT_COORDS } from "./config.js";
 import currentTaskView from "./view/currentTaskView";
 import todayTaskView from "./view/todayTaskView.js";
@@ -7,6 +7,8 @@ import subTaskViews from "./view/subTaskViews.js";
 import calendarView from "./view/calendarView.js";
 import headerView from "./view/headerView.js";
 import headerView from "./view/headerView.js";
+import authView from "./view/authView.js";
+import * as pb from "./pocketbase.js";
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
@@ -18,7 +20,12 @@ const controlAddTask = async function (taskForm) {
     if (!taskForm[0].value) return
 
     // Update State
-    if (currentTaskView.checkExpanded()) await model.loadNewTask(taskForm, selectedDate, true);
+    if (currentTaskView.checkExpanded()) {
+        currentTaskView.toggleLoadingState();
+        currentTaskView.clearFocus();
+        await model.loadNewTask(taskForm, selectedDate, true)
+        currentTaskView.toggleLoadingState();
+    };
     if (!currentTaskView.checkExpanded()) await model.loadNewTask(taskForm, selectedDate);
     // Clear form and rerender today task view
     if (currentTaskView.checkExpanded()) controlExpandCurDetail();
@@ -31,18 +38,18 @@ const controlAddTask = async function (taskForm) {
     currentTaskView.clearAllOptForms();
 };
 
-const controlCheckTask = function (index) {
+const controlCheckTask = async function (index) {
     const selectedDate = model.state.selectedDate;
 
-    model.updateChecked(selectedDate, index)
+    await model.updateChecked(selectedDate, index)
     todayTaskView.render(model.state.date[selectedDate]);
     todayTaskView.fixLargeTextDivs();
 };
 
-const controlDeleteTask = function (index) {
+const controlDeleteTask = async function (index) {
     const selectedDate = model.state.selectedDate;
 
-    model.deleteTask(index, model.state.selectedDate);
+    await model.deleteTask(index, model.state.selectedDate);
     model.state.date[selectedDate] ? todayTaskView.render(model.state.date[selectedDate]) : todayTaskView.render(model.state.date[selectedDate], false);
 };
 
@@ -54,7 +61,7 @@ const controlEditText = function (index, textEl) {
     todayTaskView.renderTextEditForm(textEl, text, finished);
 };
 
-const controlEditSubmission = function (editForm, id, ed) {
+const controlEditSubmission = async function (editForm, id, ed) {
     const selectedDate = model.state.selectedDate;
     if (!editForm) return
     if (!editForm[0]) return
@@ -63,7 +70,7 @@ const controlEditSubmission = function (editForm, id, ed) {
 
     if (editForm[0].value.length == 0) return controlDeleteTask(id);
 
-    model.editTaskText(editForm, id);
+    await model.editTaskText(editForm, id);
     todayTaskView.render(model.state.date[selectedDate]);
     todayTaskView.fixLargeTextDivs();
 
@@ -176,12 +183,43 @@ const controlUpload = function () {
     currentTaskView.renderUploaded()
 };
 
+const controlAttemptLogout = async function () {
+    await pb.attemptLogOut();
+    window.location = 'http://127.0.0.1:1234/';
+};
+
+const controlAuthView = async function () {
+    authView.renderAuthView();
+};
+
 // Initalize certain values and handlers
-const init = function () {
+const init = async function () {
+
     // Initialize State
     model.setState();
     model.setCalDates();
-    model.init();
+
+    pb.addAuthLink();
+
+    if (!pb.pb.authStore.isValid) {
+        try {
+            await pb.attemptAuth();
+        } catch {
+            console.log('User Not Signed In');
+        }
+    }
+
+    if (!pb.pb.authStore.isValid) authView.renderAuthView();
+
+    if (pb.pb.authStore.isValid) {
+        model.setUserId(pb.pb.authStore.model.id);
+        model.setUserEmail(pb.pb.authStore.model.email);
+        headerView.addUserEmailTitle(model.state.userEmail);
+    }
+
+    await model.init();
+
+    if (pb.pb.authStore.isValid) authView.disableCover();
 
     // Add Handlers
     currentTaskView.addHandlerSubmission(controlAddTask);
@@ -196,9 +234,11 @@ const init = function () {
     todayTaskView.addStopEditHandler(controlStopEditText);
     subTaskViews.addSubTaskHandler(controlMoveNearbyTask);
     headerView.addHandlerCalendar(controlCalendarView);
+    headerView.addSignOutHandler(controlAttemptLogout);
     calendarView.addHandlerClose(controlCloseCalendar);
     calendarView.addHandlerNav(controlNavCalendar);
     calendarView.addHandlerSelectDate(controlCalSelectDate);
+    authView.addHandlerAuth(controlAuthView);
 
     // Render Current for Today
     const selectedDate = model.state.selectedDate;

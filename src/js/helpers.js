@@ -1,7 +1,7 @@
 export const timeout = function (s) {
-    return new Promise(function (_, reject) {
+    return new Promise(function (resolve) {
         setTimeout(function () {
-            reject(new Error(`Request took too long! Timeout after ${s} second`));
+            resolve();
         }, s * 1000);
     });
 };

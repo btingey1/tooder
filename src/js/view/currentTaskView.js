@@ -21,6 +21,11 @@ class CurrentTaskView extends View {
         if (!scrollbarVisible(this._parentElement.closest('.body-content-wrapper'))) this._parentElement.classList.remove('scrolling')
     }
 
+    clearFocus() {
+        const mainText = this._parentElement.querySelector('.main-text')
+        mainText.blur();
+    }
+
     renderCurrentDate(dateString) {
         const markup = `
         <h1 class="main-title-text">${dateString}</h1>
@@ -79,6 +84,12 @@ class CurrentTaskView extends View {
         if (!activeFormsObj.tag || !activeFormsObj.time || !activeFormsObj.location || !activeFormsObj.file) detailContainer.classList.toggle('close-add-opt');
 
     };
+
+    toggleLoadingState() {
+        const spinner = this._parentElement.querySelector('.current-task-spinner')
+        this.clearAllOptForms();
+        spinner.classList.toggle('hidden')
+    }
 
     renderDetailForm(formType) {
         const form = this._parentElement.querySelector(`[data-id=${formType}]`);

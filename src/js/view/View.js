@@ -83,8 +83,8 @@ export default class View {
             let id;
             let ed;
             if (needID) {
-                id = Number(e.target.closest('.assigned-task').dataset.id);
-                ed = Number(e.target.closest('.assigned-task').dataset.ed);
+                id = e.target.closest('.assigned-task').dataset.id;
+                ed = e.target.closest('.assigned-task').dataset.ed;
             }
 
 

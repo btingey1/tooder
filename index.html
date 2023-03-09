@@ -13,6 +13,10 @@
     </head>
     <body>
         <div class="site-wrapper">
+            <div class="auth-cover">
+                <img class="spinner" draggable="false" src="src/img/icons/circle-notch-solid.svg">
+                <a class="auth-link hidden"><div class="auth-enter-button">Sign in with Google<img class="cal-exit-img--btn" draggable="false" src="src/img/icons/google.svg"></div></a>
+            </div>
             <div class="calendar-wrapper hidden">
                 <div class="calendar-header">
                     <div class="calendar-header-exit">
@@ -46,7 +50,13 @@
             </div>
             <div class="header">
                 <div class="header-left">
+                    <div class="header-left-items">
                     <img draggable="false" class="logo" src="src/img/Logo.svg">
+                    <div class="user-icons">
+                    <img draggable="false" class="signed-user" src="src/img/icons/user-regular.svg"> 
+                    <img draggable="false" title="Sign Out" class="log-out-button" src="src/img/icons/arrow-right-from-bracket-solid.svg">
+                    </div>
+                    </div>
                 </div>
                 <div class="header-right">
                     <img draggable="false" class="calendar-icon" src="src/img/icons/calendar-days-solid.svg"> 
@@ -73,6 +83,7 @@
                                 <div class="main-task">
                                     <form class="main-task-form" enctype="multipart/form-data">
                                     <div class="main-text-container"><input class="main-text main-desc-attr" type="text" data-id="name"></div>
+                                    <img class="spinner current-task-spinner hidden" draggable="false" src="src/img/icons/circle-notch-solid.svg">
                                     <div class="input-container">
                                         <input class="opt-input main-tag-attr hidden option" type="text" data-id="tag" maxlength="40" placeholder="tags (comma separated)">
                                         <input class="opt-input main-time-attr hidden option" type="time" data-id="time">

@@ -1,5 +1,6 @@
 import { parseDate, createDateString, getRelativeDate, shortDateStr, parseDateToObj, toTitleCase, getRelativeDateWeek } from "./helpers";
 import { CAL_LENGTH, FILE_API_KEY, FILE_URL } from "./config";
+import * as pb from "./pocketbase.js";
 
 
 export const state = {
@@ -32,6 +33,8 @@ export const state = {
         city: false,
         coords: false,
     },
+    userId: '',
+    userEmail: '',
 }
 
 export const setState = function (dateObj = new Date()) {
@@ -43,10 +46,10 @@ export const setState = function (dateObj = new Date()) {
     state.selectedOpt.prevDateStr = shortDateStr(state.selectedOpt.prevDate);
 }
 
-export const persistDateTasks = function () {
-    localStorage.setItem('dateTasks', JSON.stringify(state.date));
-    localStorage.setItem('taskTotals', JSON.stringify(state.taskTotals));
-};
+// export const persistDateTasks = function () {
+//     localStorage.setItem('dateTasks', JSON.stringify(state.date));
+//     localStorage.setItem('taskTotals', JSON.stringify(state.taskTotals));
+// };
 
 const createTaskObject = async function (taskForm, timeOfCreation, expanded) {
     // Map out all the indexes of all ids of the forms
@@ -69,16 +72,16 @@ const createTaskObject = async function (taskForm, timeOfCreation, expanded) {
 
     // If not expanded, return text only
     if (!expanded) return {
-        id: timeOfCreation.getTime(),
-        parsedDate: parseDate(timeOfCreation),
+        owner: `${state.userId}`,
+        parsedDate: state.selectedDate,
         taskText: taskForm[text].value,
         checked: false,
     }
 
     // If expanded return full object
     if (expanded) return {
-        id: timeOfCreation.getTime(),
-        parsedDate: parseDate(timeOfCreation),
+        owner: `${state.userId}`,
+        parsedDate: state.selectedDate,
         taskText: taskForm[text].value,
         taskLocation: state.activeForms.city ? state.activeForms.city : null,
         taskCoords: state.activeForms.coords ? state.activeForms.coords : null,
@@ -102,36 +105,41 @@ export const loadNewTask = async function (taskForm, selectedDate, expanded = fa
     // Create our Task Object and Add It to State
     const taskObject = await createTaskObject(taskForm, timeOfCreation, expanded);
     if (!taskObject) return
-    dateState.push(taskObject);
-    updateTaskTotals(selectedDate)
 
-    persistDateTasks();
+    // updateTaskTotals(selectedDate);
+    // persistDateTasks();
+
+    const id = await pb.attempUploadTask(taskObject);
+    taskObject.id = id;
+    dateState.push(taskObject);
 };
 
 // THIS MIGHT NOT WORK IF TASKS ARE DEEPLY NESTED
-export const deleteTask = function (index, selectedDate) {
+export const deleteTask = async function (index, selectedDate) {
     const finished = state.date[selectedDate][index].checked;
     const newSelectedDateArr = state.date[selectedDate].slice(0);
     newSelectedDateArr.splice(index, 1);
+
+    await pb.attemptDeleteTask(state.date[selectedDate][index].id);
 
     // Set date array and totals, and delete stuff if neccessary
     updateTaskTotals(selectedDate, false, finished, true);
     state.date[selectedDate] = newSelectedDateArr;
     if (state.date[selectedDate].length == 0) delete state.date[selectedDate];
 
-    persistDateTasks();
+    // persistDateTasks();
 }
 
-export const editTaskText = function (taskForm, id) {
+export const editTaskText = async function (taskForm, id) {
     const selectedDate = state.selectedDate;
-    state.date[selectedDate][id].taskText = taskForm[0].value
-    persistDateTasks();
+    state.date[selectedDate][id].taskText = taskForm[0].value;
+    await pb.attemptUpdateTask(state.date[selectedDate][id].id, 'taskText', taskForm[0].value);
 };
 
-export const updateChecked = function (selectedDate, index) {
+export const updateChecked = async function (selectedDate, index) {
     state.date[selectedDate][index].checked = !state.date[selectedDate][index].checked;
-    updateTaskTotals(selectedDate, false, state.date[selectedDate][index].checked)
-    persistDateTasks();
+    updateTaskTotals(selectedDate, false, state.date[selectedDate][index].checked);
+    await pb.attemptUpdateTask(state.date[selectedDate][index].id, 'checked', state.date[selectedDate][index].checked)
 };
 
 // Store and Update Task Totals
@@ -262,12 +270,48 @@ export const returnCity = async function (lat, lng) {
     }
 }
 
-export const init = function (dateObj = new Date()) {
+export const setUserId = function (userId) {
+    state.userId = userId;
+};
+
+export const setUserEmail = function (userEmail) {
+    state.userEmail = userEmail;
+};
+
+const setTaskTotals = function () {
+    for (let [parsedDate, tasks] of Object.entries(state.date)) {
+        state.taskTotals[parsedDate] = { assigned: 0, finished: 0 };
+        for (let task of tasks) {
+            if (task.checked) state.taskTotals[parsedDate].finished += 1;
+            if (!task.checked) state.taskTotals[parsedDate].assigned += 1
+        }
+    }
+};
+
+const parseTasksFromPB = function (recordArr) {
+    recordArr.forEach(record => {
+        if (!state.date[record.parsedDate]) state.date[record.parsedDate] = []
+        state.date[record.parsedDate].push({
+            owner: `${record.owner}`,
+            parsedDate: record.parsedDate,
+            taskText: record.taskText,
+            taskLocation: record.taskLocation,
+            taskCoords: record.taskCoords,
+            taskTime: record.taskTime,
+            taskTag: record.taskTag.split(',').map(tag => tag.trim()),
+            taskFile: record.taskFile,
+            checked: record.checked,
+            id: record.id,
+        })
+    })
+};
+
+export const init = async function () {
     state.todayDate = parseDate();
     state.todayOpt.tomorrow = getRelativeDate(state.todayDate, true, true);
     state.todayOpt.yesterday = getRelativeDate(state.todayDate, false, true);
-    const taskStorage = localStorage.getItem('dateTasks');
-    const totalsStorage = localStorage.getItem('taskTotals')
-    if (taskStorage) state.date = JSON.parse(taskStorage);
-    if (totalsStorage) state.taskTotals = JSON.parse(totalsStorage);
+    parseTasksFromPB(await pb.attemptGetRecordList())
+    // const taskStorage = localStorage.getItem('dateTasks');
+    // if (taskStorage) state.date = JSON.parse(taskStorage);
+    setTaskTotals();
 };

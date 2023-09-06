@@ -954,6 +954,7 @@ input[type="file"] {
     background-image: url("../img/Noise.webp");
     background-color: #022b5e;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: 'Space Grotesk';
@@ -1037,4 +1038,15 @@ input[type="file"] {
     left: -9999px; 
     width: 1px; 
     height: 1px;
+}
+
+.guest-enter-button {
+    text-decoration: underline;
+    cursor: pointer;
+    user-select: none;
+}
+
+.spacer-sign-in {
+    height: 2rem;
+    width: 1rem;
 }

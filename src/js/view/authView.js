@@ -25,6 +25,15 @@ class AuthView extends View {
         })
     }
 
+    addHandlerGuest(handler) {
+        this._parentElement.addEventListener('click', function (e) {
+            const btn = e.target.closest('.guest-enter-button')
+            if (!btn) return
+
+            handler();
+        })
+    }
+
 }
 
 export default new AuthView();

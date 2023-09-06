@@ -193,6 +193,15 @@ const controlAuthView = async function () {
     authView.renderAuthView();
 };
 
+const controlGuestEnter = async function () {
+    model.setUserId('Guest');
+    model.setUserEmail('Guest');
+    model.setGuest(true);
+    headerView.addUserEmailTitle('Guest');
+    await model.init(true);
+    authView.disableCover();
+}
+
 // Initalize certain values and handlers
 const init = async function () {
 
@@ -241,6 +250,7 @@ const init = async function () {
     calendarView.addHandlerNav(controlNavCalendar);
     calendarView.addHandlerSelectDate(controlCalSelectDate);
     authView.addHandlerAuth(controlAuthView);
+    authView.addHandlerGuest(controlGuestEnter);
 
     // Render Current for Today
     const selectedDate = model.state.selectedDate;

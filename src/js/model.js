@@ -35,6 +35,7 @@ export const state = {
     },
     userId: '',
     userEmail: '',
+    isGuest: false,
 }
 
 export const setState = function (dateObj = new Date()) {
@@ -102,9 +103,11 @@ export const loadNewTask = async function (taskForm, selectedDate, expanded = fa
     const taskObject = await createTaskObject(taskForm, timeOfCreation, expanded);
     if (!taskObject) return
 
+    if (!state.isGuest) {
+        const id = await pb.attempUploadTask(taskObject);
+        taskObject.id = id;
+    }
 
-    const id = await pb.attempUploadTask(taskObject);
-    taskObject.id = id;
     dateState.push(taskObject);
 };
 
@@ -113,7 +116,9 @@ export const deleteTask = async function (index, selectedDate) {
     const newSelectedDateArr = state.date[selectedDate].slice(0);
     newSelectedDateArr.splice(index, 1);
 
-    await pb.attemptDeleteTask(state.date[selectedDate][index].id);
+    if (!state.isGuest) {
+        await pb.attemptDeleteTask(state.date[selectedDate][index].id);
+    }
 
     // Set date array and totals, and delete stuff if neccessary
     updateTaskTotals(selectedDate, false, finished, true);
@@ -124,13 +129,17 @@ export const deleteTask = async function (index, selectedDate) {
 export const editTaskText = async function (taskForm, id) {
     const selectedDate = state.selectedDate;
     state.date[selectedDate][id].taskText = taskForm[0].value;
-    await pb.attemptUpdateTask(state.date[selectedDate][id].id, 'taskText', taskForm[0].value);
+    if (!state.isGuest) {
+        await pb.attemptUpdateTask(state.date[selectedDate][id].id, 'taskText', taskForm[0].value);
+    }
 };
 
 export const updateChecked = async function (selectedDate, index) {
     state.date[selectedDate][index].checked = !state.date[selectedDate][index].checked;
     updateTaskTotals(selectedDate, false, state.date[selectedDate][index].checked);
-    await pb.attemptUpdateTask(state.date[selectedDate][index].id, 'checked', state.date[selectedDate][index].checked)
+    if (!state.isGuest) {
+        await pb.attemptUpdateTask(state.date[selectedDate][index].id, 'checked', state.date[selectedDate][index].checked)
+    }
 };
 
 // Store and Update Task Totals
@@ -269,6 +278,10 @@ export const setUserEmail = function (userEmail) {
     state.userEmail = userEmail;
 };
 
+export const setGuest = function (guest) {
+    state.isGuest = guest;
+};
+
 const setTaskTotals = function () {
     for (let [parsedDate, tasks] of Object.entries(state.date)) {
         state.taskTotals[parsedDate] = { assigned: 0, finished: 0 };
@@ -297,12 +310,12 @@ const parseTasksFromPB = function (recordArr) {
     })
 };
 
-export const init = async function () {
+export const init = async function (guest = false) {
     state.todayDate = parseDate();
     state.todayOpt.tomorrow = getRelativeDate(state.todayDate, true, true);
     state.todayOpt.yesterday = getRelativeDate(state.todayDate, false, true);
-    parseTasksFromPB(await pb.attemptGetRecordList())
-    // const taskStorage = localStorage.getItem('dateTasks');
-    // if (taskStorage) state.date = JSON.parse(taskStorage);
-    setTaskTotals();
+    if (!guest) {
+        parseTasksFromPB(await pb.attemptGetRecordList())
+        setTaskTotals();
+    }
 };

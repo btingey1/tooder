@@ -5,10 +5,12 @@ class AuthView extends View {
 
     renderAuthView() {
         const spinner = this._parentElement.querySelector('.spinner');
-        const auther = this._parentElement.querySelector('.auth-link')
+        const auther = this._parentElement.querySelector('.auth-link');
+        const guest = this._parentElement.querySelector('.guest-enter-button');
 
         spinner.classList.toggle('hidden');
         auther.classList.toggle('hidden');
+        guest.classList.toggle('hidden');
     }
 
     disableCover() {
